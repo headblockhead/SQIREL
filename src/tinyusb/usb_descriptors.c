@@ -180,8 +180,8 @@ char serial[2 * PICO_UNIQUE_BOARD_ID_SIZE_BYTES + 1];
 // array of pointer to string descriptors
 char const *string_desc_arr[] = {
     (const char[]){0x09, 0x04}, // 0: is supported language is English (0x0409)
-    "TinyUSB",                  // 1: Manufacturer
-    "TinyUSB Device",           // 2: Product
+    "heablockhead",             // 1: Manufacturer
+    "Pico Keyboard",            // 2: Product
     serial,                     // 3: Serials, uses the flash ID
 };
 

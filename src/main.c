@@ -15,11 +15,13 @@ struct key {
   uint_fast8_t row; // The row it is wired to
   uint_fast8_t col; // The column it is wired to
   void (*rising[16])(
+      struct key *, uint_fast8_t,
       uint_fast8_t);           // A list of functions to call when the
                                // key is pressed down, for each layer (0-15)
   uint_fast8_t risingargs[16]; // The arguments to pass to each function in the
                                // rising list.
-  void (*falling[16])(uint_fast8_t); // A list of functions to call when the
+  void (*falling[16])(struct key *, uint_fast8_t,
+                      uint_fast8_t); // A list of functions to call when the
                                      // key is released, for each layer (0-15)
   uint_fast8_t fallingargs[16]; // The arguments to pass to each function in the
                                 // falling list.
@@ -32,6 +34,12 @@ bool active_keycodes[256] = {};
 
 // modifiers is a bitfield of all the modifier keys that are currently pressed.
 uint_fast8_t modifiers = 0;
+
+// layer is a layer of the keyboard, when a key is pressed the topmost active
+// layer is used.
+uint_fast8_t default_layer = 0; // The defualt layer is always active.
+bool layers[16] = {}; // The layers of the keyboard. If a layer is true, it is
+                      // active.
 
 // USB Callbacks:
 
@@ -143,11 +151,108 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
   (void)bufsize;
 }
 
-void keydown(uint_fast8_t keycode) { active_keycodes[keycode] = true; }
-void keyup(uint_fast8_t keycode) { active_keycodes[keycode] = false; }
+//----------------------------------------------------------------------------
+// Key functions!
+// ---------------------------------------------------------------------------
 
-void moddown(uint_fast8_t modcode) { modifiers |= modcode; }
-void modup(uint_fast8_t modcode) { modifiers &= ~modcode; }
+// Send a normal keydown to the host.
+void keydown(struct key *key, uint_fast8_t keycode, uint_fast8_t layer) {
+  (void)key;
+  (void)layer;
+  active_keycodes[keycode] = true;
+}
+// Send a normal keyup to the host.
+void keyup(struct key *key, uint_fast8_t keycode, uint_fast8_t layer) {
+  (void)key;
+  (void)layer;
+  active_keycodes[keycode] = false;
+}
+
+// Send a modifier keydown to the host.
+void moddown(struct key *key, uint_fast8_t modcode, uint_fast8_t layer) {
+  (void)key;
+  (void)layer;
+  modifiers |= modcode;
+}
+// Send a modifier keyup to the host.
+void modup(struct key *key, uint_fast8_t modcode, uint_fast8_t layer) {
+  (void)key;
+  (void)layer;
+  modifiers &= ~modcode;
+}
+
+// passthroughrising that passes down the rising function to all layers below
+// the current one.
+void passthroughrising(struct key *key, uint_fast8_t arg, uint_fast8_t layer) {
+  (void)arg;
+  for (int i = layer - 1; i >= 0; i--) {
+    if (!layers[i]) {
+      continue;
+    }
+    if (i == default_layer) {
+      return;
+    }
+    key->rising[i](key, key->risingargs[i], i);
+  }
+}
+// passthroughfalling that passes down the falling function to all layers below
+// the current one.
+void passthroughfalling(struct key *key, uint_fast8_t arg, uint_fast8_t layer) {
+  (void)arg;
+  for (int i = layer - 1; i >= 0; i--) {
+    if (!layers[i]) {
+      continue;
+    }
+    if (i == default_layer) {
+      return;
+    }
+    key->falling[i](key, key->fallingargs[i], i);
+  }
+}
+
+// momentaryrising that sets the layer to true when the key is pressed down.
+void momentaryrising(struct key *key, uint_fast8_t arg, uint_fast8_t layer) {
+  (void)key;
+  (void)layer;
+  layers[arg] = true;
+}
+
+// momentaryfalling that sets the layer to false when the key is released.
+void momentaryfalling(struct key *key, uint_fast8_t arg, uint_fast8_t layer) {
+  (void)key;
+  (void)layer;
+  layers[arg] = false;
+}
+
+// togglerising that toggles the layer when the key is pressed down.
+void togglerising(struct key *key, uint_fast8_t arg, uint_fast8_t layer) {
+  (void)key;
+  if (layer == arg) {
+    layer = default_layer;
+  } else {
+    layer = arg;
+  }
+}
+
+// turnonrising that turns on the layer, while disabling all other layers (apart
+// from the defaulf layer) when the key is pressed down.
+void turnonrising(struct key *key, uint_fast8_t arg, uint_fast8_t layer) {
+  (void)key;
+  (void)layer;
+  for (int i = 0; i <= 15; i++) {
+    layers[i] = false;
+  }
+  layers[default_layer] = true;
+  layers[arg] = true;
+}
+
+// defaultrising changes the default layer to the arg layer when the key is
+// pressed down.
+void defaultrising(struct key *key, uint_fast8_t arg, uint_fast8_t layer) {
+  (void)key;
+  (void)layer;
+  default_layer = arg;
+}
 
 struct key key1 = {
     .row = 0,
@@ -196,6 +301,30 @@ struct key key5 = {
 
 struct key *keys[5] = {&key1, &key2, &key3, &key4, &key5};
 
+void executekeyrising(struct key *key) {
+  for (int i = 15; i >= 0; i--) {
+    if (i == default_layer) {
+      return;
+    }
+    if (!layers[i]) {
+      continue;
+    }
+    key->rising[i](key, key->risingargs[i], i);
+  }
+}
+
+void executekeyfalling(struct key *key) {
+  for (int i = 15; i >= 0; i--) {
+    if (i == default_layer) {
+      return;
+    }
+    if (!layers[i]) {
+      continue;
+    }
+    key->falling[i](key, key->fallingargs[i], i);
+  }
+}
+
 // core1_entry is the entry point for the second core, and runs the input
 // checking cycle, and runs the pressed functions for each key.
 void core1_entry() {
@@ -207,19 +336,17 @@ void core1_entry() {
   while (true) {
     for (int i = 0; i <= 4; i++) {
       if (gpio_get(i)) {
-        if (!keys[i]->pressed) {
-          keys[i]->pressed = true;
-          if (keys[i]->rising[0] != NULL) {
-            keys[i]->rising[0](keys[i]->risingargs[0]);
-          }
-        }
-      } else {
         if (keys[i]->pressed) {
-          keys[i]->pressed = false;
-          if (keys[i]->falling[0] != NULL) {
-            keys[i]->falling[0](keys[i]->fallingargs[0]);
-          }
+          continue;
         }
+        keys[i]->pressed = true;
+        executekeyrising(keys[i]);
+      } else {
+        if (!keys[i]->pressed) {
+          continue;
+        }
+        keys[i]->pressed = false;
+        executekeyfalling(keys[i]);
       }
     }
   }
