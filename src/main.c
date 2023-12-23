@@ -12,29 +12,30 @@
 
 // A key represents a physical key on the keyboard.
 struct key {
-  uint_fast8_t row;             // The row it is wired to
-  uint_fast8_t col;             // The column it is wired to
-  void (*rising[16])(uint8_t);  // A list of functions to call when the
-                                // key is pressed down, for each layer (0-15)
-  uint8_t risingargs[16];       // The arguments to pass to each function in the
-                                // rising list.
-  void (*falling[16])(uint8_t); // A list of functions to call when the
-                                // key is released, for each layer (0-15)
-  uint8_t fallingargs[16];      // The arguments to pass to each function in the
+  uint_fast8_t row; // The row it is wired to
+  uint_fast8_t col; // The column it is wired to
+  void (*rising[16])(
+      uint_fast8_t);           // A list of functions to call when the
+                               // key is pressed down, for each layer (0-15)
+  uint_fast8_t risingargs[16]; // The arguments to pass to each function in the
+                               // rising list.
+  void (*falling[16])(uint_fast8_t); // A list of functions to call when the
+                                     // key is released, for each layer (0-15)
+  uint_fast8_t fallingargs[16]; // The arguments to pass to each function in the
                                 // falling list.
   bool pressed;                 // Whether the key is currently pressed down.
 };
 
+// active_keycodes is a list of all the keycodes that are currently pressed,
+// theese are sent to the host with every keyboard HID report.
 bool active_keycodes[256] = {};
 
 // USB Callbacks:
 
-bool device_connected = false;
-
 // Invoked when device is mounted
-void tud_mount_cb(void) { device_connected = true; };
+void tud_mount_cb(void){};
 // Invoked when device is unmounted
-void tud_umount_cb(void) { device_connected = false; };
+void tud_umount_cb(void){};
 
 // Invoked when usb bus is suspended
 // remote_wakeup_en : if host allow us  to perform remote wakeup
@@ -45,18 +46,23 @@ void tud_suspend_cb(bool remote_wakeup_en) { (void)remote_wakeup_en; }
 // Invoked when usb bus is resumed
 void tud_resume_cb(void) {}
 
-// Send HID report to host
-static void send_hid_keycode(uint8_t keycode_assembly[6]) {
+// Send HID reports to the host
+
+// Send a HID report with the given keycodes to the host.
+static void send_hid_kbd_codes(uint8_t keycode_assembly[6]) {
   // skip if hid is not ready yet
-  if (!tud_hid_ready())
+  if (!tud_hid_ready()) {
     return;
+  };
   tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, keycode_assembly);
 }
 
-static void send_null_hid_report() {
+// Send a HID report with no keycodes to the host.
+static void send_hid_kbd_null() {
   // skip if hid is not ready yet
-  if (!tud_hid_ready())
+  if (!tud_hid_ready()) {
     return;
+  };
   tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, NULL);
 }
 
@@ -65,32 +71,34 @@ static void send_null_hid_report() {
 // previous one is complete
 void hid_task(void) {
   // Poll every 10ms
-  const uint32_t interval_ms = 10;
-  static uint32_t start_ms = 0;
+  const uint32_t interval_ms = 10;    // Time between each report
+  static uint32_t next_report_ms = 0; // Time of next report
 
-  if (board_millis() - start_ms < interval_ms)
-    return; // not enough time
-  start_ms += interval_ms;
+  if (board_millis() - next_report_ms < interval_ms) {
+    return; // Running too fast, try again later.
+  };
+  next_report_ms += interval_ms; // Schedule next report
 
-  // Send the 1st of report chain, the rest will be sent by
-  // tud_hid_report_complete_cb()
+  // Reports are sent in a chain, with one report for each HID device.
 
-  uint8_t keycode_assembly[6] = {0};
-  uint_fast8_t index = 0;
-  for (int i = 0; i < 256; i++) {
-    if (active_keycodes[i]) {
-      if (index >= 6) {
-        send_hid_keycode(keycode_assembly);
+  // First, send the keyboard report. 6 keycodes can be sent in each report as
+  // being pressed.
+  uint8_t keycode_assembly[6] = {0}; // The keycodes to send in the report.
+  uint_fast8_t index = 0;            // The index of the keycode_assembly array.
+
+  for (int i = 0; i <= 0xFF; i++) { // Loop through all keycodes
+    if (active_keycodes[i]) {       // If the keycode is active (pressed down)
+      keycode_assembly[index] = i;  // Add the keycode to the assembly array.
+      index++;          // Increment the index of the assembly array.
+      if (index >= 6) { // If the report is full, stop adding keycodes.
         break;
       }
-      keycode_assembly[index] = i;
-      index++;
     }
   }
-  if (index < 6) {
-    send_hid_keycode(keycode_assembly);
-  } else if (index == 0) {
-    send_null_hid_report();
+  if (index > 0) { // If there are any keycodes to send, send them.
+    send_hid_kbd_codes(keycode_assembly);
+  } else {
+    send_hid_kbd_null();
   }
 }
 
@@ -127,8 +135,8 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
   (void)instance;
 }
 
-void keydown(uint8_t keycode) { active_keycodes[keycode] = true; }
-void keyup(uint8_t keycode) { active_keycodes[keycode] = false; }
+void keydown(uint_fast8_t keycode) { active_keycodes[keycode] = true; }
+void keyup(uint_fast8_t keycode) { active_keycodes[keycode] = false; }
 
 struct key key1 = {
     .row = 0,
@@ -176,6 +184,7 @@ struct key key5 = {
 };
 
 struct key *keys[5] = {&key1, &key2, &key3, &key4, &key5};
+
 // core1_entry is the entry point for the second core, and runs the input
 // checking cycle, and runs the pressed functions for each key.
 void core1_entry() {
@@ -191,7 +200,6 @@ void core1_entry() {
           keys[i]->pressed = true;
           if (keys[i]->rising[0] != NULL) {
             keys[i]->rising[0](keys[i]->risingargs[0]);
-            sleep_ms(10);
           }
         }
       } else {
@@ -199,7 +207,6 @@ void core1_entry() {
           keys[i]->pressed = false;
           if (keys[i]->falling[0] != NULL) {
             keys[i]->falling[0](keys[i]->fallingargs[0]);
-            sleep_ms(10);
           }
         }
       }
