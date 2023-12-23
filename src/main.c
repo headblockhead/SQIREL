@@ -30,6 +30,9 @@ struct key {
 // theese are sent to the host with every keyboard HID report.
 bool active_keycodes[256] = {};
 
+// modifiers is a bitfield of all the modifier keys that are currently pressed.
+uint_fast8_t modifiers = 0;
+
 // USB Callbacks:
 
 // Invoked when device is mounted
@@ -54,7 +57,7 @@ static void send_hid_kbd_codes(uint8_t keycode_assembly[6]) {
   if (!tud_hid_ready()) {
     return;
   };
-  tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, keycode_assembly);
+  tud_hid_keyboard_report(REPORT_ID_KEYBOARD, modifiers, keycode_assembly);
 }
 
 // Send a HID report with no keycodes to the host.
@@ -63,7 +66,7 @@ static void send_hid_kbd_null() {
   if (!tud_hid_ready()) {
     return;
   };
-  tud_hid_keyboard_report(REPORT_ID_KEYBOARD, 0, NULL);
+  tud_hid_keyboard_report(REPORT_ID_KEYBOARD, modifiers, NULL);
 }
 
 // Every 10ms, we will sent 1 report for each HID profile (keyboard, mouse etc
@@ -108,6 +111,7 @@ void hid_task(void) {
 void tud_hid_report_complete_cb(uint8_t instance, uint8_t const *report,
                                 uint16_t len) {
   (void)instance;
+  (void)report;
   (void)len;
 }
 
@@ -133,27 +137,34 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id,
                            hid_report_type_t report_type, uint8_t const *buffer,
                            uint16_t bufsize) {
   (void)instance;
+  (void)report_id;
+  (void)report_type;
+  (void)buffer;
+  (void)bufsize;
 }
 
 void keydown(uint_fast8_t keycode) { active_keycodes[keycode] = true; }
 void keyup(uint_fast8_t keycode) { active_keycodes[keycode] = false; }
 
+void moddown(uint_fast8_t modcode) { modifiers |= modcode; }
+void modup(uint_fast8_t modcode) { modifiers &= ~modcode; }
+
 struct key key1 = {
     .row = 0,
     .col = 0,
-    .rising = {keydown},
-    .risingargs = {HID_KEY_A},
-    .falling = {keyup},
-    .fallingargs = {HID_KEY_A},
+    .rising = {moddown},
+    .risingargs = {KEYBOARD_MODIFIER_LEFTCTRL},
+    .falling = {modup},
+    .fallingargs = {KEYBOARD_MODIFIER_LEFTCTRL},
 };
 
 struct key key2 = {
     .row = 0,
     .col = 1,
-    .rising = {keydown},
-    .risingargs = {HID_KEY_B},
-    .falling = {keyup},
-    .fallingargs = {HID_KEY_B},
+    .rising = {moddown},
+    .risingargs = {KEYBOARD_MODIFIER_LEFTALT},
+    .falling = {modup},
+    .fallingargs = {KEYBOARD_MODIFIER_LEFTALT},
 };
 
 struct key key3 = {
