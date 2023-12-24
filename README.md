@@ -1,24 +1,21 @@
 # Simple QMK Inspired Runtime Editable Library (SQIREL)
-<div align="center">
-  
-[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
-[![xc compatible](https://xcfile.dev/badge.svg)](https://xcfile.dev)
+<sup>(Pronounced like <i>squirrel</i>)</sup>
 
-</div>
-<sup>(Pronounced *squirrel*)</sup>
+🚧 This project is currently **under construction**, so do not expect a usable result yet! 🚧
 
 ## Goals:
 - Create an easy to understand and simple keyboard library that allows for runtime layout and configuration edits.
 - Make sure it is as documented and clearly organised as possible.
 - Keep it independent of any microcontroller.
 
+For an example implementation of SQIREL, see the [SQIREL-pico](https://github.com/headblockhead/SQIREL-pico) example template.
+
 ## Tasks
 
 ### Build
-Env: PICO_SDK_PATH
 Directory: ./build
 
-Builds the keyboard firmware.
+Builds a static archive library (`.a`).
 
 ```bash
 cmake ..
