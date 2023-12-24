@@ -1,10 +1,10 @@
+# Simple QMK Inspired Runtime Editable Library (SQIREL)
 <div align="center">
-
+  
+[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
 [![xc compatible](https://xcfile.dev/badge.svg)](https://xcfile.dev)
 
 </div>
-
-# Simple QMK Inspired Runtime Editable Library (SQIREL)
 <sup>(Pronounced *squirrel*)</sup>
 
 ## Goals:
