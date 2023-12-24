@@ -1,12 +1,16 @@
-# SQIREL
-(squirrel)
+<div align="center">
 
-Simple QMK Inspired Runtime Editable Library
+[![xc compatible](https://xcfile.dev/badge.svg)](https://xcfile.dev)
 
-Goals:
-Create an easy to understand and simple keyboard library that allows for runtime layout and configuration edits.
-Make sure it is as documented and clearly organised as possible.
-Keep it independent of any microcontroller.
+</div>
+
+# Simple QMK Inspired Runtime Editable Library (SQIREL)
+<sup>(Pronounced *squirrel*)</sup>
+
+## Goals:
+- Create an easy to understand and simple keyboard library that allows for runtime layout and configuration edits.
+- Make sure it is as documented and clearly organised as possible.
+- Keep it independent of any microcontroller.
 
 ## Tasks
 
