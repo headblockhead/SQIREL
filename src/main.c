@@ -185,12 +185,9 @@ void modup(struct key *key, uint_fast8_t modcode, uint_fast8_t layer) {
 // the current one.
 void passthroughrising(struct key *key, uint_fast8_t arg, uint_fast8_t layer) {
   (void)arg;
-  for (int i = layer - 1; i >= 0; i--) {
+  for (uint_fast8_t i = layer - 1; i >= default_layer; i--) {
     if (!layers[i]) {
       continue;
-    }
-    if (i == default_layer) {
-      return;
     }
     key->rising[i](key, key->risingargs[i], i);
   }
@@ -199,12 +196,9 @@ void passthroughrising(struct key *key, uint_fast8_t arg, uint_fast8_t layer) {
 // the current one.
 void passthroughfalling(struct key *key, uint_fast8_t arg, uint_fast8_t layer) {
   (void)arg;
-  for (int i = layer - 1; i >= 0; i--) {
+  for (uint_fast8_t i = layer - 1; i >= default_layer; i--) {
     if (!layers[i]) {
       continue;
-    }
-    if (i == default_layer) {
-      return;
     }
     key->falling[i](key, key->fallingargs[i], i);
   }
@@ -302,10 +296,7 @@ struct key key5 = {
 struct key *keys[5] = {&key1, &key2, &key3, &key4, &key5};
 
 void executekeyrising(struct key *key) {
-  for (int i = 15; i >= 0; i--) {
-    if (i == default_layer) {
-      return;
-    }
+  for (uint_fast8_t i = 15; i >= default_layer; i--) {
     if (!layers[i]) {
       continue;
     }
@@ -314,10 +305,7 @@ void executekeyrising(struct key *key) {
 }
 
 void executekeyfalling(struct key *key) {
-  for (int i = 15; i >= 0; i--) {
-    if (i == default_layer) {
-      return;
-    }
+  for (uint_fast8_t i = 15; i >= default_layer; i--) {
     if (!layers[i]) {
       continue;
     }
