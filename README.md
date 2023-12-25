@@ -1,5 +1,5 @@
-# SQUIRREL - Simplified QMK as a library
-<sup>or: Simple QMK Uniquely Inspired *Really* Runtime Editable Library</sup>
+# SQUIRREL - Simplified, runtime-configurable QMK as a library
+<sup>or: Simplified QMK Uniquely Immaculate (and) Readable Runtime Editable Library</sup>
 
 🚧 This project is currently **under construction**, so do not expect a usable result yet! 🚧
 
