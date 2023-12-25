@@ -1,10 +1,10 @@
-#ifndef SQIREL_QUANTUM_H
-#define SQIREL_QUANTUM_H
+#ifndef SQUIRREL_QUANTUM_H
+#define SQUIRREL_QUANTUM_H
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "sqirel_keys.h"
-#include "sqirel_types.h"
+#include "squirrel_keys.h"
+#include "squirrel_types.h"
 
 // layers is a list of all quantum layers in the keyboard, when a key is pressed
 // the layers are read top (15) to bottom (default_layer), with only active

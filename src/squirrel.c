@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "sqirel.h"
+#include "squirrel.h"
 
 // execute_key_rising executes the rising function of the key on the topmost
 // active layer (above the default layer).

@@ -1,10 +1,10 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "sqirel_quantum.h"
+#include "squirrel_quantum.h"
 
-#include "sqirel_keys.h"
-#include "sqirel_types.h"
+#include "squirrel_keys.h"
+#include "squirrel_types.h"
 
 bool layers[16] = {true,  false, false, false, false, false, false, false,
                    false, false, false, false, false, false, false, false};

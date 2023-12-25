@@ -1,4 +1,4 @@
-#include "sqirel_keys.h"
+#include "squirrel_keys.h"
 #include <stdbool.h>
 #include <stdint.h>
 
