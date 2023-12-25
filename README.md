@@ -1,5 +1,5 @@
-# Simple QMK Inspired Runtime Editable Library (SQIREL)
-<sup>(Pronounced like <i>squirrel</i>)</sup>
+# SQUIRREL
+<sup>Simple QMK Uniquely Inspired *Really* Runtime Editable Library</sup>
 
 🚧 This project is currently **under construction**, so do not expect a usable result yet! 🚧
 
@@ -8,7 +8,7 @@
 - Make sure it is as documented and clearly organised as possible.
 - Keep it independent of any microcontroller.
 
-For an example implementation of SQIREL, see the [SQIREL-pico](https://github.com/headblockhead/SQIREL-pico) example template.
+For an example implementation of SQUIRREL, see the [SQUIRREL-pico](https://github.com/headblockhead/SQUIRREL-pico) example template.
 
 ## Tasks
 
