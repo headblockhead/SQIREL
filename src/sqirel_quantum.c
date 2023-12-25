@@ -1,9 +1,14 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "sqirel_keys.h"
 #include "sqirel_quantum.h"
+
+#include "sqirel_keys.h"
 #include "sqirel_types.h"
+
+bool layers[16] = {true,  false, false, false, false, false, false, false,
+                   false, false, false, false, false, false, false, false};
+uint_fast8_t default_layer = 0;
 
 void key_down(struct key *key, uint_fast8_t keycode, uint_fast8_t layer) {
   (void)key;

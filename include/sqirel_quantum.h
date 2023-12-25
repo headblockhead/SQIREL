@@ -9,11 +9,11 @@
 // layers is a list of all quantum layers in the keyboard, when a key is pressed
 // the layers are read top (15) to bottom (default_layer), with only active
 // layers (layers that are 'true' in this array) being read.
-bool layers[16] = {};
+extern bool layers[16];
 
 // The defualt layer is always active, it is the bottom layer of the
 // layer stack and no layers below it will be read.
-uint_fast8_t default_layer = 0;
+extern uint_fast8_t default_layer;
 
 // key_down marks the keycode as active in the active_keycodes array.
 void key_down(struct key *key, uint_fast8_t keycode, uint_fast8_t layer);

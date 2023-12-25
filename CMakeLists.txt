@@ -9,6 +9,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_library(sqirel STATIC
         src/sqirel.c
         src/sqirel_quantum.c
+        src/sqirel_keys.c
         )
 
 target_include_directories(sqirel PRIVATE include)
