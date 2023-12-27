@@ -5,8 +5,6 @@
 
 // key represents a physical key on the keyboard.
 struct key {
-  uint_fast8_t row; // The row the key is wired to.
-  uint_fast8_t col; // The column the key is wired to.
   void (*rising[16])(
       struct key *, uint_fast8_t,
       uint_fast8_t);           // A list of functions to call when the

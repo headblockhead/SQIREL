@@ -10,4 +10,5 @@ extern bool active_keycodes[256];
 // modifiers is a bitfield of all the modifier keys that are currently pressed.
 // This should also be sent to the host with all keyboard HID reports.
 extern uint_fast8_t modifiers;
+
 #endif
