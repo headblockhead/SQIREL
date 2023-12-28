@@ -5,6 +5,10 @@ project(squirrel VERSION 0.0.1 DESCRIPTION "Simplified, runtime-configurable QMK
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
         # Create files for CCLS
         set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+        add_compile_options(-Og) # Enable debug optimizations
+else()
+       add_compile_options(-Os) # Enable size optimizations
 endif()
 
 # Generate an executable
