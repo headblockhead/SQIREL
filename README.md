@@ -40,3 +40,14 @@ Cleans the build directory for a fresh build.
 rm -rf ./build
 mkdir build
 ```
+
+### Test
+Directory: ./build
+
+Runs the unit tests.
+
+```bash
+cmake -S. -DBUILD_TESTING=true ..
+cmake --build .
+ctest
+```
