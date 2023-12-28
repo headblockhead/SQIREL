@@ -18,9 +18,19 @@ Directory: ./build
 Builds a static archive library (`.a`).
 
 ```bash
-cmake ..
-make -j16
-cp compile_commands.json ../ # Required file for LSP autocomplete.
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j4
+```
+
+### Build-debug
+Directory: ./build
+
+Builds the library with debug build type.
+
+```bash
+cmake -DCMAKE_BUILD_TYPE=Debug .. 
+make -j4
+cp compile_commands.json ../ # Copies the autocomplete information for ccls.
 ```
 
 ### Clean

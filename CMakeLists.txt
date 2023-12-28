@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(squirrel VERSION 0.0.1 DESCRIPTION "Simple QMK Inspired Runtime Editable Library")
+project(squirrel VERSION 0.0.1 DESCRIPTION "Simplified, runtime-configurable QMK as a library")
 
-# Create files for CCLS
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        # Create files for CCLS
+        set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+endif()
 
 # Generate an executable
 add_library(squirrel STATIC
