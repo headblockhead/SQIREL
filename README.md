@@ -10,6 +10,11 @@
 
 For an example implementation of SQUIRREL, see the [SQUIRREL-pico](https://github.com/headblockhead/SQUIRREL-pico) example template.
 
+## Development
+
+SQUIRREL uses [nix](https://nixos.org).
+To develop, run the nix shell using `nix develop`. SQUIRREL can also be built using `nix build`.
+
 ## Tasks
 
 ### Build
