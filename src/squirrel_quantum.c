@@ -47,7 +47,7 @@ void pass_through_rising(struct key *key, uint_fast8_t arg, uint_fast8_t layer,
   for (uint_fast8_t i = layer - 1; i >= *default_layer;
        i--) { // Start at the layer below the current layer, go down until the
               // default layer.
-    if (!layers[i]) { // If the layer is not active, skip it.
+    if (!(*layers[i])) { // If the layer is not active, skip it.
       continue;
     }
     key->rising[i](key, key->risingargs[i], i, layers,
@@ -62,11 +62,12 @@ void pass_through_falling(struct key *key, uint_fast8_t arg, uint_fast8_t layer,
   for (uint_fast8_t i = layer - 1; i >= *default_layer;
        i--) { // Start at the layer below the current layer, go down until the
               // default layer.
-    if (!layers[i]) { // If the layer is not active, skip it.
+    if (!(*layers[i])) { // If the layer is not active, skip it.
       continue;
     }
-    key->falling[i](key, key->fallingargs[i], i); // Call the falling function
-                                                  // for the layer.
+    key->falling[i](key, key->fallingargs[i], i, layers,
+                    default_layer); // Call the falling function
+                                    // for the layer.
   }
 }
 
