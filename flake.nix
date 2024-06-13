@@ -21,16 +21,16 @@
         {
           packages.default = pkgs.callPackage ./default.nix { };
           devShells.default = pkgs.mkShell {
-            buildInputs = with pkgs; [
-              xc
+            buildInputs = [
+              inputs.xc
 
-              cmake
-              gcc
-              ccls
-              python39
-              gnumake
-              git
-              cacert
+              pkgs.cmake
+              pkgs.gcc
+              pkgs.ccls
+              pkgs.python39
+              pkgs.gnumake
+              pkgs.git
+              pkgs.cacert
             ];
           };
         }
