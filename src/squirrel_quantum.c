@@ -47,7 +47,7 @@ void pass_through_rising(struct key *key, uint_fast8_t arg, uint_fast8_t layer,
   for (uint_fast8_t i = layer - 1; i >= *default_layer;
        i--) { // Start at the layer below the current layer, go down until the
               // default layer.
-    if (!(*layers[i])) { // If the layer is not active, skip it.
+    if (!(*layers)[i]) { // If the layer is not active, skip it.
       continue;
     }
     key->rising[i](key, key->risingargs[i], i, layers,
@@ -62,7 +62,7 @@ void pass_through_falling(struct key *key, uint_fast8_t arg, uint_fast8_t layer,
   for (uint_fast8_t i = layer - 1; i >= *default_layer;
        i--) { // Start at the layer below the current layer, go down until the
               // default layer.
-    if (!(*layers[i])) { // If the layer is not active, skip it.
+    if (!(*layers)[i]) { // If the layer is not active, skip it.
       continue;
     }
     key->falling[i](key, key->fallingargs[i], i, layers,
@@ -76,7 +76,7 @@ void momentary_rising(struct key *key, uint_fast8_t target_layer,
                       uint_fast8_t *default_layer) {
   (void)key;
   (void)layer;
-  *layers[target_layer] = true;
+  (*layers)[target_layer] = true;
 }
 
 void momentary_falling(struct key *key, uint_fast8_t target_layer,
@@ -84,7 +84,7 @@ void momentary_falling(struct key *key, uint_fast8_t target_layer,
                        uint_fast8_t *default_layer) {
   (void)key;
   (void)layer;
-  *layers[target_layer] = false;
+  (*layers)[target_layer] = false;
 }
 
 void toggle(struct key *key, uint_fast8_t target_layer, uint_fast8_t layer,
@@ -104,8 +104,8 @@ void turn_on(struct key *key, uint_fast8_t target_layer, uint_fast8_t layer,
   for (int i = 0; i <= 15; i++) {
     (*layers)[i] = false;
   }
-  *layers[*default_layer] = true;
-  *layers[target_layer] = true;
+  (*layers)[*default_layer] = true;
+  (*layers)[target_layer] = true;
 }
 
 void default_set(struct key *key, uint_fast8_t target_layer, uint_fast8_t layer,

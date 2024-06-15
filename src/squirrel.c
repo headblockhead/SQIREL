@@ -5,7 +5,7 @@ void execute_key_rising(struct key *key, bool (*layers)[16],
                         uint_fast8_t *default_layer) {
   for (uint_fast8_t i = 15; i >= *default_layer;
        i--) {            // Loop through all layers, top to bottom.
-    if (!(*layers[i])) { // If the layer is not active, skip it.
+    if (!(*layers)[i]) { // If the layer is not active, skip it.
       continue;
     }
     key->rising[i](key, key->risingargs[i], i, layers,
@@ -18,7 +18,7 @@ void execute_key_falling(struct key *key, bool (*layers)[16],
                          uint_fast8_t *default_layer) {
   for (uint_fast8_t i = 15; i >= *default_layer;
        i--) {            // Loop through all layers, top to bottom.
-    if (!(*layers[i])) { // If the layer is not active, skip it.
+    if (!(*layers)[i]) { // If the layer is not active, skip it.
       continue;
     }
     key->falling[i](key, key->fallingargs[i], i, layers,
