@@ -16,6 +16,7 @@ add_library(squirrel STATIC
         src/squirrel.c
         src/squirrel_quantum.c
         src/squirrel_keys.c
+        src/squirrel_constructors.c
         )
 
 target_include_directories(squirrel PRIVATE include)

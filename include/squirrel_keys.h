@@ -1,5 +1,5 @@
-#ifndef SQUIREL_KEYS_H
-#define SQUIREL_KEYS_H
+#ifndef SQUIRREL_KEYS_H
+#define SQUIRREL_KEYS_H
 #include <stdbool.h>
 #include <stdint.h>
 

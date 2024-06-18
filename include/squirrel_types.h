@@ -1,5 +1,5 @@
-#ifndef SQUIREL_TYPES_H
-#define SQUIREL_TYPES_H
+#ifndef SQUIRREL_TYPES_H
+#define SQUIRREL_TYPES_H
 #include <stdbool.h>
 #include <stdint.h>
 
