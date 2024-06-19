@@ -11,3 +11,12 @@ struct key make_key(uint_fast8_t keycode) {
       .fallingargs = {keycode},
   };
 }
+
+struct key make_modifier(uint_fast8_t modifier_code) {
+  return (struct key){
+      .rising = {mod_down},
+      .risingargs = {modifier_code},
+      .falling = {mod_up},
+      .fallingargs = {modifier_code},
+  };
+}
