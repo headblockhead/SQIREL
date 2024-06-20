@@ -22,7 +22,7 @@ add_library(squirrel STATIC
 target_include_directories(squirrel PRIVATE include)
 
 set_target_properties(squirrel PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(squirrel PROPERTIES PUBLIC_HEADER include/squirel.h)
+set_target_properties(squirrel PROPERTIES PUBLIC_HEADER include/squirrel.h)
 
 # Enable testing
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
