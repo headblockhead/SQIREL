@@ -29,6 +29,10 @@ void mod_down(struct key *key, uint_fast8_t modifier_code, uint_fast8_t layer,
 void mod_up(struct key *key, uint_fast8_t modifier_code, uint_fast8_t layer,
             bool (*layers)[16], uint_fast8_t *default_layer);
 
+// media adds a media command to be executed to the media_commands array.
+void media(struct key *key, uint_fast8_t media_code, uint_fast8_t layer,
+           bool (*layers)[16], uint_fast8_t *default_layer);
+
 // pass_through_rising passes down the rising function of the key to the first
 // active layer below it (but no layers below the default layer). Equivalent to
 // KC_TRNS when paired with pass_through_falling.

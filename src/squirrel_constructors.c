@@ -20,3 +20,10 @@ struct key make_modifier(uint_fast8_t modifier_code) {
       .fallingargs = {modifier_code},
   };
 }
+
+struct key make_media(uint_fast8_t media_code) {
+  return (struct key){
+      .rising = {media},
+      .risingargs = {media_code},
+  };
+}

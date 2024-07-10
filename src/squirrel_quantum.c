@@ -41,6 +41,13 @@ void mod_up(struct key *key, uint_fast8_t modifier_code, uint_fast8_t layer,
                                // modifiers variable.
 }
 
+void media(struct key *key, uint_fast8_t media_code, uint_fast8_t layer,
+           bool (*layers)[16], uint_fast8_t *default_layer) {
+  (void)key;
+  (void)layer;
+  media_commands[media_code] = true; // Mark the media command as active.
+}
+
 void pass_through_rising(struct key *key, uint_fast8_t arg, uint_fast8_t layer,
                          bool (*layers)[16], uint_fast8_t *default_layer) {
   (void)arg;
