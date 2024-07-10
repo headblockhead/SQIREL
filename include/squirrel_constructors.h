@@ -6,5 +6,6 @@
 
 struct key make_key(uint_fast8_t keycode);
 struct key make_modifier(uint_fast8_t modifier_code);
+struct key make_media(uint_fast8_t media_code);
 
 #endif
