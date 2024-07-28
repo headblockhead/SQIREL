@@ -29,9 +29,13 @@ void mod_down(struct key *key, uint16_t modifier_code, uint8_t layer,
 void mod_up(struct key *key, uint16_t modifier_code, uint8_t layer,
             bool (*layers)[16], uint8_t *default_layer);
 
-// media adds a media command to be executed to the media_commands array.
-void media(struct key *key, uint16_t media_code, uint8_t layer,
-           bool (*layers)[16], uint8_t *default_layer);
+// media_down sets the media code to the media_code.
+void media_down(struct key *key, uint16_t media_code, uint8_t layer,
+                bool (*layers)[16], uint8_t *default_layer);
+
+// media_up sets the media code back to 0.
+void media_up(struct key *key, uint16_t media_code, uint8_t layer,
+              bool (*layers)[16], uint8_t *default_layer);
 
 // pass_through_rising passes down the rising function of the key to the first
 // active layer below it (but no layers below the default layer). Equivalent to

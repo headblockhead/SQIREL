@@ -21,9 +21,11 @@ struct key make_modifier(uint8_t modifier_code) {
   };
 }
 
-struct key make_media(uint8_t media_code) {
+struct key make_media(uint16_t media_code) {
   return (struct key){
-      .rising = {media},
+      .rising = {media_down},
       .risingargs = {media_code},
+      .falling = {media_up},
+      .fallingargs = {media_code},
   };
 }
