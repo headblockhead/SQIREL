@@ -9,4 +9,4 @@ bool active_keycodes[256] = {false};
 // uncommon, see: https://www.freebsddiary.org/APC/usb_hid_usages.php - Consumer
 bool media_commands[256] = {false};
 // modifiers is a bitfield of all active modifiers.
-uint_fast8_t modifiers = 0;
+uint8_t modifiers = 0;

@@ -2,8 +2,8 @@
 #include <stdlib.h>
 
 void execute_key_rising(struct key *key, bool (*layers)[16],
-                        uint_fast8_t *default_layer) {
-  for (uint_fast8_t i = 15; i >= *default_layer;
+                        uint8_t *default_layer) {
+  for (uint8_t i = 15; i >= *default_layer;
        i--) {            // Loop through all layers, top to bottom.
     if (!(*layers)[i]) { // If the layer is not active, skip it.
       continue;
@@ -15,8 +15,8 @@ void execute_key_rising(struct key *key, bool (*layers)[16],
 }
 
 void execute_key_falling(struct key *key, bool (*layers)[16],
-                         uint_fast8_t *default_layer) {
-  for (uint_fast8_t i = 15; i >= *default_layer;
+                         uint8_t *default_layer) {
+  for (uint8_t i = 15; i >= *default_layer;
        i--) {            // Loop through all layers, top to bottom.
     if (!(*layers)[i]) { // If the layer is not active, skip it.
       continue;
@@ -28,7 +28,7 @@ void execute_key_falling(struct key *key, bool (*layers)[16],
 }
 
 void check_key(struct key *key, bool key_is_pressed, bool (*layers)[16],
-               uint_fast8_t *default_layer) {
+               uint8_t *default_layer) {
   if (key_is_pressed &&
       !key->pressed) {   // If the key is pressed, but wasn't pressed before:
     key->pressed = true; // Mark the key as pressed.

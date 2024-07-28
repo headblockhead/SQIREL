@@ -8,50 +8,61 @@
 
 bool layers[16] = {true,  false, false, false, false, false, false, false,
                    false, false, false, false, false, false, false, false};
-uint_fast8_t default_layer = 0;
+uint8_t default_layer = 0;
 
-void key_down(struct key *key, uint_fast8_t keycode, uint_fast8_t layer,
-              bool (*layers)[16], uint_fast8_t *default_layer) {
+void key_down(struct key *key, uint16_t keycode, uint8_t layer,
+              bool (*layers)[16], uint8_t *default_layer) {
   (void)key;
   (void)layer;
+  keycode = keycode & 0xFF;        // Mask the keycode to only the lower byte.
   active_keycodes[keycode] = true; // Mark the keycode as active.
 }
 
-void key_up(struct key *key, uint_fast8_t keycode, uint_fast8_t layer,
-            bool (*layers)[16], uint_fast8_t *default_layer) {
+void key_up(struct key *key, uint16_t keycode, uint8_t layer,
+            bool (*layers)[16], uint8_t *default_layer) {
   (void)key;
   (void)layer;
+  keycode = keycode & 0xFF;         // Mask the keycode to only the lower byte.
   active_keycodes[keycode] = false; // Mark the keycode as inactive.
 }
 
-void mod_down(struct key *key, uint_fast8_t modifier_code, uint_fast8_t layer,
-              bool (*layers)[16], uint_fast8_t *default_layer) {
+void mod_down(struct key *key, uint16_t modifier_code, uint8_t layer,
+              bool (*layers)[16], uint8_t *default_layer) {
   (void)key;
   (void)layer;
+  modifier_code = modifier_code & 0xFF; // Mask the modifier code to only the
+                                        // lower byte.
   modifiers |=
       modifier_code; // OR the modifier code into the modifiers variable.
 }
 
-void mod_up(struct key *key, uint_fast8_t modifier_code, uint_fast8_t layer,
-            bool (*layers)[16], uint_fast8_t *default_layer) {
+void mod_up(struct key *key, uint16_t modifier_code, uint8_t layer,
+            bool (*layers)[16], uint8_t *default_layer) {
   (void)key;
-
   (void)layer;
+  modifier_code = modifier_code & 0xFF; // Mask the modifier code to only the
+                                        // lower byte.
   modifiers &= ~modifier_code; // AND the inverse of the modifier code into the
                                // modifiers variable.
 }
 
-void media(struct key *key, uint_fast8_t media_code, uint_fast8_t layer,
-           bool (*layers)[16], uint_fast8_t *default_layer) {
+void media_down(struct key *key, uint16_t media_code, uint8_t layer,
+                bool (*layers)[16], uint8_t *default_layer) {
   (void)key;
   (void)layer;
-  media_commands[media_code] = true; // Mark the media command as active.
+  active_media_code = media_code;
+}
+void media_up(struct key *key, uint16_t media_code, uint8_t layer,
+              bool (*layers)[16], uint8_t *default_layer) {
+  (void)key;
+  (void)layer;
+  active_media_code = 0;
 }
 
-void pass_through_rising(struct key *key, uint_fast8_t arg, uint_fast8_t layer,
-                         bool (*layers)[16], uint_fast8_t *default_layer) {
+void pass_through_rising(struct key *key, uint16_t arg, uint8_t layer,
+                         bool (*layers)[16], uint8_t *default_layer) {
   (void)arg;
-  for (uint_fast8_t i = layer - 1; i >= *default_layer;
+  for (uint8_t i = layer - 1; i >= *default_layer;
        i--) { // Start at the layer below the current layer, go down until the
               // default layer.
     if (!(*layers)[i]) { // If the layer is not active, skip it.
@@ -63,10 +74,10 @@ void pass_through_rising(struct key *key, uint_fast8_t arg, uint_fast8_t layer,
   }
 }
 
-void pass_through_falling(struct key *key, uint_fast8_t arg, uint_fast8_t layer,
-                          bool (*layers)[16], uint_fast8_t *default_layer) {
+void pass_through_falling(struct key *key, uint16_t arg, uint8_t layer,
+                          bool (*layers)[16], uint8_t *default_layer) {
   (void)arg;
-  for (uint_fast8_t i = layer - 1; i >= *default_layer;
+  for (uint8_t i = layer - 1; i >= *default_layer;
        i--) { // Start at the layer below the current layer, go down until the
               // default layer.
     if (!(*layers)[i]) { // If the layer is not active, skip it.
@@ -78,24 +89,22 @@ void pass_through_falling(struct key *key, uint_fast8_t arg, uint_fast8_t layer,
   }
 }
 
-void momentary_rising(struct key *key, uint_fast8_t target_layer,
-                      uint_fast8_t layer, bool (*layers)[16],
-                      uint_fast8_t *default_layer) {
+void momentary_rising(struct key *key, uint16_t target_layer, uint8_t layer,
+                      bool (*layers)[16], uint8_t *default_layer) {
   (void)key;
   (void)layer;
   (*layers)[target_layer] = true;
 }
 
-void momentary_falling(struct key *key, uint_fast8_t target_layer,
-                       uint_fast8_t layer, bool (*layers)[16],
-                       uint_fast8_t *default_layer) {
+void momentary_falling(struct key *key, uint16_t target_layer, uint8_t layer,
+                       bool (*layers)[16], uint8_t *default_layer) {
   (void)key;
   (void)layer;
   (*layers)[target_layer] = false;
 }
 
-void toggle(struct key *key, uint_fast8_t target_layer, uint_fast8_t layer,
-            bool (*layers)[16], uint_fast8_t *default_layer) {
+void toggle(struct key *key, uint16_t target_layer, uint8_t layer,
+            bool (*layers)[16], uint8_t *default_layer) {
   (void)key;
   if (layer == target_layer) {
     layer = *default_layer;
@@ -104,8 +113,8 @@ void toggle(struct key *key, uint_fast8_t target_layer, uint_fast8_t layer,
   }
 }
 
-void turn_on(struct key *key, uint_fast8_t target_layer, uint_fast8_t layer,
-             bool (*layers)[16], uint_fast8_t *default_layer) {
+void turn_on(struct key *key, uint16_t target_layer, uint8_t layer,
+             bool (*layers)[16], uint8_t *default_layer) {
   (void)key;
   (void)layer;
   for (int i = 0; i <= 15; i++) {
@@ -115,8 +124,8 @@ void turn_on(struct key *key, uint_fast8_t target_layer, uint_fast8_t layer,
   (*layers)[target_layer] = true;
 }
 
-void default_set(struct key *key, uint_fast8_t target_layer, uint_fast8_t layer,
-                 bool (*layers)[16], uint_fast8_t *default_layer) {
+void default_set(struct key *key, uint16_t target_layer, uint8_t layer,
+                 bool (*layers)[16], uint8_t *default_layer) {
   (void)key;
   (void)layer;
   *default_layer = target_layer;

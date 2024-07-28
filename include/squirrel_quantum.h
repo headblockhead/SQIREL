@@ -13,63 +13,61 @@ extern bool layers[16];
 
 // The defualt layer is always active, it is the bottom layer of the
 // layer stack and no layers below it will be read.
-extern uint_fast8_t default_layer;
+extern uint8_t default_layer;
 
 // key_down marks the keycode as active in the active_keycodes array.
-void key_down(struct key *key, uint_fast8_t keycode, uint_fast8_t layer,
-              bool (*layers)[16], uint_fast8_t *default_layer);
+void key_down(struct key *key, uint16_t keycode, uint8_t layer,
+              bool (*layers)[16], uint8_t *default_layer);
 // key_up marks the keycode as inactive in the active_keycodes array.
-void key_up(struct key *key, uint_fast8_t keycode, uint_fast8_t layer,
-            bool (*layers)[16], uint_fast8_t *default_layer);
+void key_up(struct key *key, uint16_t keycode, uint8_t layer,
+            bool (*layers)[16], uint8_t *default_layer);
 
 // mod_down adds the modifier code to the modifiers variable.
-void mod_down(struct key *key, uint_fast8_t modifier_code, uint_fast8_t layer,
-              bool (*layers)[16], uint_fast8_t *default_layer);
+void mod_down(struct key *key, uint16_t modifier_code, uint8_t layer,
+              bool (*layers)[16], uint8_t *default_layer);
 // mod_up removes the modifier code from the modifiers variable.
-void mod_up(struct key *key, uint_fast8_t modifier_code, uint_fast8_t layer,
-            bool (*layers)[16], uint_fast8_t *default_layer);
+void mod_up(struct key *key, uint16_t modifier_code, uint8_t layer,
+            bool (*layers)[16], uint8_t *default_layer);
 
 // media adds a media command to be executed to the media_commands array.
-void media(struct key *key, uint_fast8_t media_code, uint_fast8_t layer,
-           bool (*layers)[16], uint_fast8_t *default_layer);
+void media(struct key *key, uint16_t media_code, uint8_t layer,
+           bool (*layers)[16], uint8_t *default_layer);
 
 // pass_through_rising passes down the rising function of the key to the first
 // active layer below it (but no layers below the default layer). Equivalent to
 // KC_TRNS when paired with pass_through_falling.
-void pass_through_rising(struct key *key, uint_fast8_t arg, uint_fast8_t layer,
-                         bool (*layers)[16], uint_fast8_t *default_layer);
+void pass_through_rising(struct key *key, uint16_t arg, uint8_t layer,
+                         bool (*layers)[16], uint8_t *default_layer);
 
 // pass_through_falling passes down the falling function of the key to the first
 // active layer below it (but no layers below the default layer). Equivalent to
 // KC_TRNS when paired with pass_through_rising.
-void pass_through_falling(struct key *key, uint_fast8_t arg, uint_fast8_t layer,
-                          bool (*layers)[16], uint_fast8_t *default_layer);
+void pass_through_falling(struct key *key, uint16_t arg, uint8_t layer,
+                          bool (*layers)[16], uint8_t *default_layer);
 
 // momentary_rising sets the target layer to active when run. Equivalent to
 // MO(layer) when paired with momentary_falling.
-void momentary_rising(struct key *key, uint_fast8_t target_layer,
-                      uint_fast8_t layer, bool (*layers)[16],
-                      uint_fast8_t *default_layer);
+void momentary_rising(struct key *key, uint16_t target_layer, uint8_t layer,
+                      bool (*layers)[16], uint8_t *default_layer);
 
 // momentary_falling sets the target layer to inactive when run. Equivalent to
 // MO(layer) when paired with momentary_rising.
-void momentary_falling(struct key *key, uint_fast8_t target_layer,
-                       uint_fast8_t layer, bool (*layers)[16],
-                       uint_fast8_t *default_layer);
+void momentary_falling(struct key *key, uint16_t target_layer, uint8_t layer,
+                       bool (*layers)[16], uint8_t *default_layer);
 
 // toggle toggles the target layer when the key is pressed. Can be
 // assigned to rising or falling functions. Equivalent to TG(layer).
-void toggle(struct key *key, uint_fast8_t target_layer, uint_fast8_t layer,
-            bool (*layers)[16], uint_fast8_t *default_layer);
+void toggle(struct key *key, uint16_t target_layer, uint8_t layer,
+            bool (*layers)[16], uint8_t *default_layer);
 
 // turn_on turns on the target layer, while disabling all other layers (apart
 // from the default layer). Can be assigned to rising or falling functions.
 // Equivalent to TO(layer).
-void turn_on(struct key *key, uint_fast8_t target_layer, uint_fast8_t layer,
-             bool (*layers)[16], uint_fast8_t *default_layer);
+void turn_on(struct key *key, uint16_t target_layer, uint8_t layer,
+             bool (*layers)[16], uint8_t *default_layer);
 
 // default_set changes the default layer to the target layer. Can be assigned to
 // rising or falling functions. Equivalent to DF(layer).
-void default_set(struct key *key, uint_fast8_t target_layer, uint_fast8_t layer,
-                 bool (*layers)[16], uint_fast8_t *default_layer);
+void default_set(struct key *key, uint16_t target_layer, uint8_t layer,
+                 bool (*layers)[16], uint8_t *default_layer);
 #endif
