@@ -56,7 +56,9 @@ void media_up(struct key *key, uint16_t media_code, uint8_t layer,
               bool (*layers)[16], uint8_t *default_layer) {
   (void)key;
   (void)layer;
-  active_media_code = 0;
+  if (active_media_code == media_code) {
+    active_media_code = 0;
+  }
 }
 
 void pass_through_rising(struct key *key, uint16_t arg, uint8_t layer,
