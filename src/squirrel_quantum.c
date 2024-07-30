@@ -23,8 +23,8 @@ void key_down(struct key *key, uint16_t keycode, uint8_t layer,
   keycode = keycode & 0xFF; // Mask the keycode to only the lower byte.
 
   if (custom_code_active) {
-    if (custom_code_buffer_index == 15) {
-      return;
+    if (custom_code_buffer_index > 15) {
+      custom_code_buffer_index = 0;
     }
     switch (keycode) {
     case 0x27: // 0
@@ -37,7 +37,7 @@ void key_down(struct key *key, uint16_t keycode, uint8_t layer,
       custom_code_buffer_index++;
       break;
     case 0x28: // ENTER
-      if (custom_code_buffer_index == 15) {
+      if (custom_code_buffer_index > 7) {
         active_media_code = custom_code_buffer;
       } else {
         active_keycodes[custom_code_buffer] = true;
