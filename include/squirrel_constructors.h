@@ -7,7 +7,7 @@
 struct key make_key(void);
 
 // Add a standard keycode function to the key struct for the given layer
-void key_add_KC(struct key *key, uint8_t layer, uint8_t keycode);
+void key_add_keycode(struct key *key, uint8_t layer, uint8_t keycode);
 // Add a modifier function to the key struct for the given layer
 void key_add_mod(struct key *key, uint8_t layer, uint8_t modifier_code);
 // Add a media function to the key struct for the given layer

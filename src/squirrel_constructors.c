@@ -6,7 +6,7 @@ struct key make_key(void) {
   return (struct key){};
 }
 
-void key_add_KC(struct key *key, uint8_t layer, uint8_t keycode) {
+void key_add_keycode(struct key *key, uint8_t layer, uint8_t keycode) {
   key->rising[layer] = key_down;
   key->risingargs[layer] = keycode;
   key->falling[layer] = key_up;
