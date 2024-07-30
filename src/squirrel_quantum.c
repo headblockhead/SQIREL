@@ -29,6 +29,7 @@ void key_down(struct key *key, uint16_t keycode, uint8_t layer,
     switch (keycode) {
     case 0x27: // 0
       custom_code_buffer = custom_code_buffer << 1;
+      custom_code_buffer |= 0;
       custom_code_buffer_index++;
       break;
     case 0x1E: // 1
