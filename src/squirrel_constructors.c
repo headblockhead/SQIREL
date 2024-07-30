@@ -26,3 +26,10 @@ void key_add_media(struct key *key, uint8_t layer, uint16_t media_code) {
   key->falling[layer] = media_up;
   key->fallingargs[layer] = media_code;
 }
+
+void key_add_momentary(struct key *key, uint8_t layer, uint8_t target_layer) {
+  key->rising[layer] = momentary_rising;
+  key->risingargs[layer] = target_layer;
+  key->falling[layer] = momentary_falling;
+  key->fallingargs[layer] = target_layer;
+}
