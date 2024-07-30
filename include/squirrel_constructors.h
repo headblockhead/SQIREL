@@ -16,4 +16,6 @@ void key_add_media(struct key *key, uint8_t layer, uint16_t media_code);
 void key_add_momentary(struct key *key, uint8_t layer, uint8_t target_layer);
 // Add a pass-through function to the key struct for the given layer
 void key_add_pass_through(struct key *key, uint8_t layer);
+// Add a custom code function to the key struct for the given layer
+void key_add_custom_code(struct key *key, uint8_t layer);
 #endif
