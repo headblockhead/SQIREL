@@ -109,7 +109,7 @@ void custom_code_up(struct key *key, uint16_t arg, uint8_t layer,
   (void)arg;
   (void)layer;
   custom_code_active = false;
-  if (custom_code_buffer_index == 15) {
+  if (custom_code_buffer_index > 7) {
     active_media_code = 0;
   } else {
     active_keycodes[custom_code_buffer] = false;
