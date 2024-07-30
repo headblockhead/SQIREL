@@ -67,6 +67,9 @@ void pass_through_rising(struct key *key, uint16_t arg, uint8_t layer,
   for (uint8_t i = layer - 1; i >= *default_layer;
        i--) { // Start at the layer below the current layer, go down until the
               // default layer.
+    if (i >= 16) {
+      continue;
+    }
     if (!(*layers)[i]) { // If the layer is not active, skip it.
       continue;
     }
@@ -79,9 +82,12 @@ void pass_through_rising(struct key *key, uint16_t arg, uint8_t layer,
 void pass_through_falling(struct key *key, uint16_t arg, uint8_t layer,
                           bool (*layers)[16], uint8_t *default_layer) {
   (void)arg;
-  for (uint8_t i = layer - 1; i > *default_layer;
+  for (uint8_t i = layer - 1; i >= *default_layer;
        i--) { // Start at the layer below the current layer, go down until the
               // default layer.
+    if (i >= 16) {
+      continue;
+    }
     if (!(*layers)[i]) { // If the layer is not active, skip it.
       continue;
     }
