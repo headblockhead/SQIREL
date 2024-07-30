@@ -33,3 +33,8 @@ void key_add_momentary(struct key *key, uint8_t layer, uint8_t target_layer) {
   key->falling[layer] = momentary_falling;
   key->fallingargs[layer] = target_layer;
 }
+
+void key_add_pass_through(struct key *key, uint8_t layer) {
+  key->rising[layer] = pass_through_rising;
+  key->falling[layer] = pass_through_falling;
+}
