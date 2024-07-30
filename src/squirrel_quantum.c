@@ -67,12 +67,9 @@ void pass_through_rising(struct key *key, uint16_t arg, uint8_t layer,
   for (uint8_t i = layer - 1; i >= *default_layer;
        i--) { // Start at the layer below the current layer, go down until the
     /*// default layer.*/
-    /*if (i >= 16) {*/
-    /*continue;*/
-    /*}*/
-    /*if (!(*layers)[i]) { // If the layer is not active, skip it.*/
-    /*continue;*/
-    /*}*/
+    if (!(*layers)[i]) { // If the layer is not active, skip it.
+      continue;
+    }
     key->rising[layer - 1](key, key->risingargs[layer - 1], layer - 1, layers,
                            default_layer); // Call the rising function for
                                            // the layer.
