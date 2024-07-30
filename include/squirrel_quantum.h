@@ -6,6 +6,18 @@
 #include "squirrel_keys.h"
 #include "squirrel_types.h"
 
+// if custom_code_active is true, the keyboard is in custom code mode and will
+// ignore keycodes from the key_down/up functions - instead redirecting them to
+// the custom code buffer.
+extern bool custom_code_active;
+
+// custom_code_buffer holds the custom code entered by the user. The buffer's
+// contents are read and the keycode entered is set to active when the ENTER key
+// is pressed.
+extern uint16_t custom_code_buffer; // entered in binary - 8 bits for keycode,
+                                    // 16 bits for media code.
+extern uint8_t custom_code_buffer_index; // index of the buffer
+
 // layers is a list of all quantum layers in the keyboard, when a key is pressed
 // the layers are read top (15) to bottom (default_layer), with only active
 // layers (layers that are 'true' in this array) being read.
@@ -36,6 +48,15 @@ void media_down(struct key *key, uint16_t media_code, uint8_t layer,
 // media_up sets the media code back to 0.
 void media_up(struct key *key, uint16_t media_code, uint8_t layer,
               bool (*layers)[16], uint8_t *default_layer);
+
+// custom_code_down sets the keyboard to custom code mode.
+void custom_code_down(struct key *key, uint16_t arg, uint8_t layer,
+                      bool (*layers)[16], uint8_t *default_layer);
+
+// custom_code_up sets the keyboard to normal mode and lifts up the custom code
+// key.
+void custom_code_up(struct key *key, uint16_t arg, uint8_t layer,
+                    bool (*layers)[16], uint8_t *default_layer);
 
 // pass_through_rising passes down the rising function of the key to the first
 // active layer below it (but no layers below the default layer). Equivalent to

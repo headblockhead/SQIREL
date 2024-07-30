@@ -40,3 +40,10 @@ void key_add_pass_through(struct key *key, uint8_t layer) {
   key->falling[layer] = pass_through_falling;
   key->fallingargs[layer] = 0;
 }
+
+void key_add_custom_code(struct key *key, uint8_t layer) {
+  key->rising[layer] = custom_code_down;
+  key->risingargs[layer] = 0;
+  key->falling[layer] = custom_code_up;
+  key->fallingargs[layer] = 0;
+}

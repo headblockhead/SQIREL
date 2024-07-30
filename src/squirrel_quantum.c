@@ -6,15 +6,47 @@
 #include "squirrel_keys.h"
 #include "squirrel_types.h"
 
+bool custom_code_active = false;
+uint16_t custom_code_buffer = 0; // entered in binary - 8 bit keycode, 16 bit
+                                 // media code.
+uint8_t custom_code_buffer_index = 0;
+
 bool layers[16] = {true,  false, false, false, false, false, false, false,
                    false, false, false, false, false, false, false, false};
+
 uint8_t default_layer = 0;
 
 void key_down(struct key *key, uint16_t keycode, uint8_t layer,
               bool (*layers)[16], uint8_t *default_layer) {
   (void)key;
   (void)layer;
-  keycode = keycode & 0xFF;        // Mask the keycode to only the lower byte.
+  keycode = keycode & 0xFF; // Mask the keycode to only the lower byte.
+
+  if (custom_code_active) {
+    if (custom_code_buffer_index == 16) {
+      return;
+    }
+    switch (keycode) {
+    case 0x27: // 0
+      custom_code_buffer = custom_code_buffer << 1;
+      custom_code_buffer_index++;
+      break;
+    case 0x1E: // 1
+      custom_code_buffer = custom_code_buffer << 1;
+      custom_code_buffer |= 1;
+      custom_code_buffer_index++;
+      break;
+    case 0x28: // ENTER
+      if (custom_code_buffer_index == 16) {
+        active_media_code = custom_code_buffer;
+      } else {
+        active_keycodes[custom_code_buffer] = true;
+      }
+      break;
+    }
+    return;
+  }
+
   active_keycodes[keycode] = true; // Mark the keycode as active.
 }
 
@@ -42,8 +74,8 @@ void mod_up(struct key *key, uint16_t modifier_code, uint8_t layer,
   (void)layer;
   modifier_code = modifier_code & 0xFF; // Mask the modifier code to only the
                                         // lower byte.
-  modifiers &= ~modifier_code; // AND the inverse of the modifier code into the
-                               // modifiers variable.
+  modifiers &= ~modifier_code; // AND the inverse of the modifier code into
+                               // the modifiers variable.
 }
 
 void media_down(struct key *key, uint16_t media_code, uint8_t layer,
@@ -59,6 +91,29 @@ void media_up(struct key *key, uint16_t media_code, uint8_t layer,
   if (active_media_code == media_code) {
     active_media_code = 0;
   }
+}
+
+void custom_code_down(struct key *key, uint16_t arg, uint8_t layer,
+                      bool (*layers)[16], uint8_t *default_layer) {
+  (void)key;
+  (void)arg;
+  (void)layer;
+  custom_code_active = true;
+}
+
+void custom_code_up(struct key *key, uint16_t arg, uint8_t layer,
+                    bool (*layers)[16], uint8_t *default_layer) {
+  (void)key;
+  (void)arg;
+  (void)layer;
+  custom_code_active = false;
+  custom_code_buffer = 0;
+  if (custom_code_buffer_index == 16) {
+    active_media_code = 0;
+  } else {
+    active_keycodes[custom_code_buffer] = false;
+  }
+  custom_code_buffer_index = 0;
 }
 
 void pass_through_rising(struct key *key, uint16_t arg, uint8_t layer,
