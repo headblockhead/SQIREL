@@ -98,6 +98,8 @@ void custom_code_down(struct key *key, uint16_t arg, uint8_t layer,
   (void)key;
   (void)arg;
   (void)layer;
+  custom_code_buffer = 0;
+  custom_code_buffer_index = 0;
   custom_code_active = true;
 }
 
@@ -107,13 +109,11 @@ void custom_code_up(struct key *key, uint16_t arg, uint8_t layer,
   (void)arg;
   (void)layer;
   custom_code_active = false;
-  custom_code_buffer = 0;
   if (custom_code_buffer_index == 16) {
     active_media_code = 0;
   } else {
     active_keycodes[custom_code_buffer] = false;
   }
-  custom_code_buffer_index = 0;
 }
 
 void pass_through_rising(struct key *key, uint16_t arg, uint8_t layer,
