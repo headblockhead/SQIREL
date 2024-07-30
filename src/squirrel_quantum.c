@@ -70,10 +70,10 @@ void pass_through_rising(struct key *key, uint16_t arg, uint8_t layer,
     if (!(*layers)[i]) { // If the layer is not active, skip it.
       continue;
     }
-    key->rising[layer - 1](key, key->risingargs[layer - 1], layer - 1, layers,
-                           default_layer); // Call the rising function for
-                                           // the layer.
-    return;                                // Stop looping through layers.
+    key->rising[i](key, key->risingargs[i], i, layers,
+                   default_layer); // Call the rising function for
+                                   // the layer.
+    return;                        // Stop looping through layers.
   }
 }
 
