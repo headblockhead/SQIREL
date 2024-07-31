@@ -5,15 +5,14 @@
 #include "squirrel_types.h"
 
 // Execute the rising function of the key on the highest active layer.
-void execute_key_rising(struct key *key, bool (*layers)[16],
-                        uint8_t *default_layer);
+void execute_key_rising(struct key *key);
 
 // Execute the falling function of the key on the highest active layer.
-void execute_key_falling(struct key *key, bool (*layers)[16],
-                         uint8_t *default_layer);
+void execute_key_falling(struct key *key);
 
 // Check if a key is pressed or not, and compare it to its previous state. Then
-// execute the key's rising or falling function if necessary.
-void check_key(struct key *key, bool key_is_pressed, bool (*layers)[16],
-               uint8_t *default_layer);
+// execute the key's rising or falling function if necessary. This function does
+// not debounce!
+void check_key(struct key *key, bool new_key_pin_state);
+
 #endif
