@@ -37,7 +37,7 @@ void key_down(struct key *key, uint16_t keycode, uint8_t layer) {
       custom_code_buffer_index++;
       break;
     case 0x28: // ENTER
-      if (custom_code_buffer_index > 7) {
+      if (custom_code_buffer_index > 8) {
         active_media_code = custom_code_buffer;
       } else {
         active_keycodes[custom_code_buffer] = true;
@@ -102,7 +102,7 @@ void custom_code_up(struct key *key, uint16_t arg, uint8_t layer) {
   (void)arg;
   (void)layer;
   custom_code_active = false;
-  if (custom_code_buffer_index > 7) {
+  if (custom_code_buffer_index > 8) {
     active_media_code = 0;
   } else {
     active_keycodes[custom_code_buffer] = false;
