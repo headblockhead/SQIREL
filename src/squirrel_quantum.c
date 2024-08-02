@@ -16,6 +16,14 @@ bool layers[16] = {true,  false, false, false, false, false, false, false,
 
 uint8_t default_layer = 0;
 
+void layer_change_keycodes_cancel(void) {
+  for (uint8_t i = 0; i <= 255; i++) {
+    active_keycodes[i] = false;
+  }
+  active_media_code = 0;
+  modifiers = 0;
+}
+
 void noop(struct key *key, uint16_t arg, uint8_t layer) {
   (void)key;
   (void)arg;
@@ -147,6 +155,7 @@ void pass_through_falling(struct key *key, uint16_t arg, uint8_t layer) {
 void momentary_rising(struct key *key, uint16_t target_layer, uint8_t layer) {
   (void)key;
   (void)layer;
+  layer_change_keycodes_cancel();
   layers[target_layer] = true;
 }
 
@@ -159,12 +168,14 @@ void momentary_falling(struct key *key, uint16_t target_layer, uint8_t layer) {
 void toggle(struct key *key, uint16_t target_layer, uint8_t layer) {
   (void)key;
   (void)layer;
+  layer_change_keycodes_cancel();
   layers[target_layer] = !layers[target_layer];
 }
 
 void default_set(struct key *key, uint16_t target_layer, uint8_t layer) {
   (void)key;
   (void)layer;
+  layer_change_keycodes_cancel();
   layers[layer] = false;
   default_layer = target_layer;
   layers[target_layer] = true;

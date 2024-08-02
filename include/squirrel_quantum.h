@@ -27,6 +27,10 @@ extern bool layers[16];
 // layer stack and no layers below it will be read.
 extern uint8_t default_layer;
 
+// layer_change_keycodes_cancel sets all active keycodes, media codes and
+// modifiers to false
+void layer_change_keycodes_cancel(void);
+
 // noop is a function that does nothing.
 void noop(struct key *key, uint16_t arg, uint8_t layer);
 
