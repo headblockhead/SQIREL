@@ -165,6 +165,7 @@ void toggle(struct key *key, uint16_t target_layer, uint8_t layer) {
 void default_set(struct key *key, uint16_t target_layer, uint8_t layer) {
   (void)key;
   (void)layer;
+  layers[layer] = false;
   default_layer = target_layer;
   layers[target_layer] = true;
 }
