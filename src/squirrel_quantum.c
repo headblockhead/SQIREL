@@ -16,12 +16,6 @@ bool layers[16] = {true,  false, false, false, false, false, false, false,
 
 uint8_t default_layer = 0;
 
-void layer_change_keycodes_cancel(void) {
-  for (int i = 0; i < 256; i++) {
-    active_keycodes[i] = false;
-  }
-}
-
 void noop(struct key *key, uint16_t arg, uint8_t layer) {
   (void)key;
   (void)arg;
