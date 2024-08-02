@@ -27,6 +27,9 @@ extern bool layers[16];
 // layer stack and no layers below it will be read.
 extern uint8_t default_layer;
 
+// noop is a function that does nothing.
+void noop(struct key *key, uint16_t arg, uint8_t layer);
+
 // key_down marks the keycode as active in the active_keycodes array.
 void key_down(struct key *key, uint16_t keycode, uint8_t layer);
 // key_up marks the keycode as inactive in the active_keycodes array.

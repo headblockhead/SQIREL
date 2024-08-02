@@ -16,6 +16,12 @@ bool layers[16] = {true,  false, false, false, false, false, false, false,
 
 uint8_t default_layer = 0;
 
+void noop(struct key *key, uint16_t arg, uint8_t layer) {
+  (void)key;
+  (void)arg;
+  (void)layer;
+}
+
 void key_down(struct key *key, uint16_t keycode, uint8_t layer) {
   (void)key;
   (void)layer;
@@ -80,6 +86,7 @@ void media_down(struct key *key, uint16_t media_code, uint8_t layer) {
   (void)layer;
   active_media_code = media_code;
 }
+
 void media_up(struct key *key, uint16_t media_code, uint8_t layer) {
   (void)key;
   (void)layer;
