@@ -4,8 +4,7 @@ project(squirrel VERSION 0.0.1 DESCRIPTION "Simplified, runtime-configurable QMK
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
         message(STATUS "Debug/Development build enabled")
-        # Create files for CCLS
-        set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+        set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Autocomplete support
         add_compile_options(-Og) # Enable debug optimizations
 else()
        add_compile_options(-Os) # Enable size optimizations
@@ -13,11 +12,7 @@ endif()
 
 # Generate a static library archive.
 add_library(squirrel STATIC
-        src/squirrel.c
-        src/squirrel_quantum.c
-        src/squirrel_keys.c
-        src/squirrel_constructors.c
-        )
+        src/squirrel.c)
 
 target_include_directories(squirrel PRIVATE include)
 
