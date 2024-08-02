@@ -75,11 +75,6 @@ void momentary_falling(struct key *key, uint16_t target_layer, uint8_t layer);
 // assigned to rising or falling functions. Equivalent to TG(layer).
 void toggle(struct key *key, uint16_t target_layer, uint8_t layer);
 
-// turn_on turns on the target layer, while disabling all other layers (apart
-// from the default layer). Can be assigned to rising or falling functions.
-// Equivalent to TO(layer).
-void turn_on(struct key *key, uint16_t target_layer, uint8_t layer);
-
 // default_set changes the default layer to the target layer. Can be assigned to
 // rising or falling functions. Equivalent to DF(layer).
 void default_set(struct key *key, uint16_t target_layer, uint8_t layer);

@@ -158,25 +158,13 @@ void momentary_falling(struct key *key, uint16_t target_layer, uint8_t layer) {
 
 void toggle(struct key *key, uint16_t target_layer, uint8_t layer) {
   (void)key;
-  if (layer == target_layer) {
-    layer = default_layer;
-  } else {
-    layer = target_layer;
-  }
-}
-
-void turn_on(struct key *key, uint16_t target_layer, uint8_t layer) {
-  (void)key;
   (void)layer;
-  for (int i = 0; i <= 15; i++) {
-    layers[i] = false;
-  }
-  layers[default_layer] = true;
-  layers[target_layer] = true;
+  layers[target_layer] = !layers[target_layer];
 }
 
 void default_set(struct key *key, uint16_t target_layer, uint8_t layer) {
   (void)key;
   (void)layer;
   default_layer = target_layer;
+  layers[target_layer] = true;
 }
