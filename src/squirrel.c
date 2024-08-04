@@ -6,7 +6,7 @@
 struct layer layers[17];
 int key_count;
 
-struct key noopkey = {noop, NULL, noop, NULL, false};
+// struct key noopkey = {noop, NULL, noop, NULL, false};
 
 void press_key(uint8_t key_index) {
   for (uint8_t i = 16; i >= 0; i--) {
