@@ -13,6 +13,7 @@ For an example implementation of SQUIRREL, see the [SQUIRREL-pico](https://githu
 ## Development
 
 SQUIRREL uses [nix](https://nixos.org).
+
 To develop, run the nix shell using `nix develop`. SQUIRREL can also be built using `nix build`.
 
 ## Tasks
@@ -36,6 +37,18 @@ Builds the library with debug build type.
 cmake -DCMAKE_BUILD_TYPE=Debug .. 
 make -j4
 cp compile_commands.json ../ # Copies the autocomplete information for ccls.
+```
+
+### Test
+Directory: ./build
+
+Tests the library
+
+```bash
+cmake -DCMAKE_BUILD_TYPE=Testing ..
+make -j4
+cd tests
+ctest
 ```
 
 ### Clean

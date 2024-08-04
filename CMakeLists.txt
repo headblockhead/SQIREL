@@ -6,6 +6,9 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
         message(STATUS "Debug/Development build enabled")
         set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Autocomplete support
         add_compile_options(-Og) # Enable debug optimizations
+elseif(CMAKE_BUILD_TYPE STREQUAL "Testing")
+        message(STATUS "Testing enabled")
+        add_subdirectory(tests)
 else()
        add_compile_options(-Os) # Enable size optimizations
 endif()
@@ -18,10 +21,3 @@ target_include_directories(squirrel PRIVATE include)
 
 set_target_properties(squirrel PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(squirrel PROPERTIES PUBLIC_HEADER include/squirrel.h)
-
-# Enable testing
-if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
-        message(STATUS "Testing enabled")
-        add_subdirectory(tests)
-endif()
-
