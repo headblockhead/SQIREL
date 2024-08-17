@@ -1,7 +1,7 @@
 {
-  description = "Tools for developing and building SQUIRREL";
+  description = "Tools for developing, building and testing SQUIRREL";
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     flake-utils.url = "github:numtide/flake-utils";
     xc.url = "github:joerdav/xc";
   };
@@ -14,25 +14,30 @@
             overlays = [
               (final: prev: {
                 xc = inputs.xc.packages.x86_64-linux.xc;
+                picotool = pkgs.callPackage ./picotool.nix {
+                  pico-sdk = pkgs.callPackage ./pico-sdk.nix { };
+                };
+                pico-sdk = pkgs.callPackage ./pico-sdk.nix { };
               })
             ];
           };
         in
         {
-          packages.default = pkgs.callPackage ./default.nix { };
+          # Development shell (nix develop)
           devShells.default = pkgs.mkShell {
-            buildInputs = [
-              inputs.xc
-
-              pkgs.cmake
-              pkgs.gcc
-              pkgs.ccls
-              pkgs.python39
-              pkgs.gnumake
-              pkgs.git
-              pkgs.cacert
+            buildInputs = with pkgs; [
+              xc
+              cmake
+              gcc
+              ccls
+              gnumake
+              git
+              cacert
             ];
           };
+          # The firmware (nix build)
+          packages.squirrel = pkgs.callPackage ./default.nix { };
+          checks.squirrel-tests = pkgs.callPackage ./tests.nix { };
         }
       );
 }
