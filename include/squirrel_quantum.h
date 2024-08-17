@@ -15,11 +15,11 @@ struct layer {
 // the user. Don't modify layer 16 unless you know what you're doing :).
 extern struct layer layers[17];
 
-// noop is a function that does nothing, can be used as a placeholder.
-void noop(struct key *key, ...);
+// key_nop is a function that does nothing, can be used as a placeholder.
+void key_nop(struct key *key, ...);
 
 // keyboard_press is a function that activates a keycode on the keyboard.
-void keyboard_press(struct key *key, uint8_t keycode);
+void keyboard_press(struct key *key, ...);
 
 // keyboard_release is a function that deactivates a keycode on the keyboard.
 void keyboard_release(struct key *key, uint8_t keycode);

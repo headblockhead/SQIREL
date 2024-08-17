@@ -51,8 +51,3 @@ void check_key(uint8_t key_index, bool is_pressed) {
     }
   }
 }
-
-void init_keyboard(int total_keys) {
-  layers[16].active = true;
-  key_count = key_count;
-}

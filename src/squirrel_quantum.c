@@ -4,12 +4,12 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-void noop(struct key *key, ...) { (void)key; }
+void key_nop(struct key *key, ...) { (void)key; }
 
-void keyboard_press(struct key *key, uint8_t keycode) {
-  activate_keycode(keycode);
-}
+// keyboard_press expects a single uint8 keycode
+void keyboard_press(struct key *key, ...) { va_list args; };
 
+// keyboard_release expects a single uint8 keycode
 void keyboard_release(struct key *key, uint8_t keycode) {
   deactivate_keycode(keycode);
 }
