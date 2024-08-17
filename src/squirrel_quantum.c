@@ -4,26 +4,78 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-void key_nop(struct key *key, ...) { (void)key; }
+enum squirrel_error key_nop(struct key *key, int arg_count, ...) {
+  (void)key;
+  (void)arg_count;
+}
 
 // keyboard_press expects a single uint8 keycode
-void keyboard_press(struct key *key, ...) { va_list args; };
+enum squirrel_error keyboard_press(struct key *key, int arg_count, ...) {
+  va_list args;
+  va_start(args, arg_count);
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  uint8_t keycode = va_arg(args, int);
+  activate_keycode(keycode); // squirrel_keyboard
+  va_end(args);
+  return ERR_NONE;
+};
 
 // keyboard_release expects a single uint8 keycode
-void keyboard_release(struct key *key, uint8_t keycode) {
-  deactivate_keycode(keycode);
+enum squirrel_error keyboard_release(struct key *key, int arg_count, ...) {
+  va_list args;
+  va_start(args, arg_count);
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  uint8_t keycode = va_arg(args, int);
+  deactivate_keycode(keycode); // squirrel_keyboard
+  va_end(args);
+  return ERR_NONE;
 }
 
-void keyboard_modifier_press(struct key *key, uint8_t modifier) {
-  activate_modifier(modifier);
+// keyboard_modifier_press expects a single uint8 modifier
+enum squirrel_error keyboard_modifier_press(struct key *key, int arg_count,
+                                            ...) {
+  va_list args;
+  va_start(args, arg_count);
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  uint8_t modifier = va_arg(args, int);
+  activate_modifier(modifier); // squirrel_keyboard
+  va_end(args);
+  return ERR_NONE;
 }
 
-void keyboard_modifier_release(struct key *key, uint8_t modifier) {
-  deactivate_modifier(modifier);
+enum squirrel_error keyboard_modifier_release(struct key *key, int arg_count,
+                                              ...) {
+  va_list args;
+  va_start(args, arg_count);
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  uint8_t modifier = va_arg(args, int);
+  deactivate_modifier(modifier); // squirrel_keyboard
+  va_end(args);
+  return ERR_NONE;
 }
 
-void quantum_passthrough_press(struct key *key, uint8_t layer,
-                               uint8_t key_index) {
+// quantum_passthrough_press expects a uint8 with the layer of the key it was
+// activated from, and a uint8 of the key's index in the layer.
+enum squirrel_error quantum_passthrough_press(struct key *key, int arg_count,
+                                              ...) {
+  va_list args;
+  va_start(args, arg_count);
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  uint8_t modifier = va_arg(args, int);
+  deactivate_modifier(modifier); // squirrel_keyboard
+  va_end(args);
+  return ERR_NONE;
+
   for (int i = layer; i >= 0; i--) {
     if (!layers[i].active) {
       break;
@@ -33,8 +85,8 @@ void quantum_passthrough_press(struct key *key, uint8_t layer,
   }
 }
 
-void quantum_passthrough_release(struct key *key, uint8_t layer,
-                                 uint8_t key_index) {
+enum squirrel_error quantum_passthrough_release(struct key *key, int arg_count,
+                                                ...) {
   for (int i = layer; i >= 0; i--) {
     if (!layers[i].active) {
       break;

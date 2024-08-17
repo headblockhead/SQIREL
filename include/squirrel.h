@@ -4,12 +4,19 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+enum squirrel_error {
+  ERR_NONE = 0,
+  ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT,
+};
+
 struct key {
-  void (*pressed)(struct key *, ...);  // called when the key is pressed
-  void *pressed_arguments;             // arguments to pass to pressed
+  void (*pressed)(struct key *, ...); // called when the key is pressed
+  void *pressed_arguments;            // arguments to pass to pressed
+  int pressed_argument_count; // the amount of arguments in pressed_arguments
   void (*released)(struct key *, ...); // called when the key is released
   void *released_arguments;            // arguments to pass to released
-  bool is_pressed;                     // true if the key is currently pressed
+  int released_argument_count; // the amount of arguments in released_arguments
+  bool is_pressed;             // true if the key is currently pressed
 };
 
 extern int key_count; // number of keys on the keyboard
