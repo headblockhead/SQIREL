@@ -2,7 +2,7 @@ name: Test with Nix
 on: [push, pull_request]
 
 jobs:
-  build:
+  run-checks:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -10,4 +10,4 @@ jobs:
         submodules: recursive
     - uses: DeterminateSystems/nix-installer-action@main
     - uses: DeterminateSystems/magic-nix-cache-action@main
-    - run: nix flake check -v
+    - run: nix flake check
