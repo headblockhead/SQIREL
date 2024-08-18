@@ -1,7 +1,7 @@
 #include "squirrel.h"
 #include "squirrel_quantum.h"
 
-// test: keyboard_press + keyboard_release end-to-end test in squirrel_quantum.c
+// test: keyboard_press + keyboard_release test - in squirrel_quantum.c
 int main() {
   // keyboard_press
   struct key test_key; // values unused
