@@ -11,34 +11,42 @@ struct layer {
   bool active;      // true if this layer is currently active
 };
 
-// layers is a list of all the layers in the keyboard. 0-15 are to be used by
-// the user. Don't modify layer 16 unless you know what you're doing :).
+// layers is a list of all the layers in the keyboard. 0-15 are configured,
+// layer 16 is used for held keys and should only be modified by SQUIRREL.
 extern struct layer layers[17];
 
-// key_nop is a function that does nothing, can be used as a placeholder.
-void key_nop(struct key *key, ...);
+// key_nop does nothing (no operation)
+enum squirrel_error key_nop(struct key *key, uint8_t layer, uint8_t key_index,
+                            int arg_count, ...);
 
-// keyboard_press is a function that activates a keycode on the keyboard.
-void keyboard_press(struct key *key, ...);
+// keyboard_press expects a single uint8 keycode
+enum squirrel_error keyboard_press(struct key *key, uint8_t layer,
+                                   uint8_t key_index, int arg_count, ...);
 
-// keyboard_release is a function that deactivates a keycode on the keyboard.
-void keyboard_release(struct key *key, uint8_t keycode);
+// keyboard_release expects a single uint8 keycode
+enum squirrel_error keyboard_release(struct key *key, uint8_t layer,
+                                     uint8_t key_index, int arg_count, ...);
 
-// keyboard_modifier_press is a function that activates a modifier on the
-// keyboard.
-void keyboard_modifier_press(struct key *key, uint8_t modifier);
+// keyboard_modifier_press expects a single uint8 modifier
+enum squirrel_error keyboard_modifier_press(struct key *key, uint8_t layer,
+                                            uint8_t key_index, int arg_count,
+                                            ...);
 
-// keyboard_modifier_release is a function that deactivates a modifier on the
-// keyboard.
-void keyboard_modifier_release(struct key *key, uint8_t modifier);
+// keyboard_modifier_release expects a single uint8 modifier
+enum squirrel_error keyboard_modifier_release(struct key *key, uint8_t layer,
+                                              uint8_t key_index, int arg_count,
+                                              ...);
 
-// quantum_passthrough is a function that passes the keypress to the next layer
-void quantum_passthrough_press(struct key *key, uint8_t layer,
-                               uint8_t key_index);
+// quantum_passthrough passes the press action to the highest active layer below
+// the current one. It expectes no extra args.
+enum squirrel_error quantum_passthrough_press(struct key *key, uint8_t layer,
+                                              uint8_t key_index, int arg_count,
+                                              ...);
 
-// quantum_passthrough_release is a function that passes the keyrelease to the
-// next layer
-void quantum_passthrough_release(struct key *key, uint8_t layer,
-                                 uint8_t key_index);
+// quantum_passthrough_release passes the release action to the highest active
+// layer below the current one. It expectes no extra args.
+enum squirrel_error quantum_passthrough_release(struct key *key, uint8_t layer,
+                                                uint8_t key_index,
+                                                int arg_count, ...);
 
 #endif
