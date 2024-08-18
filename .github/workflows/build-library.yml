@@ -11,3 +11,8 @@ jobs:
     - uses: DeterminateSystems/nix-installer-action@main
     - uses: DeterminateSystems/magic-nix-cache-action@main
     - run: nix build '.?submodules=1#squirrel'
+    - uses: actions/upload-artifact@v4
+      with:
+        name: libsquirrel.a
+        path: result/libsquirrel.a
+
