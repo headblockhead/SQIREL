@@ -15,7 +15,13 @@ endif()
 
 # Generate a static library archive.
 add_library(squirrel STATIC
-        src/squirrel.c)
+        src/squirrel.c
+        src/squirrel_quantum.c
+        src/squirrel_keyboard.c
+        src/squirrel_key.c
+        src/squirrel_consumer.c
+        src/squirrel_init.c
+        )
 
 target_include_directories(squirrel PRIVATE include)
 

@@ -1,4 +1,5 @@
 #include "squirrel.h"
+#include "squirrel_key.h"
 #include "squirrel_quantum.h"
 
 // test: keyboard_modifier_press + keyboard_modifier_release test - in
