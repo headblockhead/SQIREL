@@ -90,21 +90,23 @@ enum squirrel_error quantum_passthrough_press(struct key *key, uint8_t layer,
   if (layer == 0) {
     return ERR_PASSTHROUGH_ON_BOTTOM_LAYER;
   };
-  enum squirrel_error err;
-  for (uint8_t i = layer - 1; i >= 0; i--) {
+  for (uint8_t i = layer - 1; i != 255; i--) {
     if (!layers[i].active) {
       continue;
     }
     struct key *selected_key = &(layers[i].keys[key_index]);
-    err = selected_key->pressed(selected_key, i, key_index,
-                                selected_key->pressed_argument_count,
-                                selected_key->pressed_arguments);
+    enum squirrel_error err = selected_key->pressed(
+        selected_key, i, key_index, selected_key->pressed_argument_count,
+        selected_key->pressed_arguments);
+    if (err != ERR_NONE) {
+      return err;
+    }
     if (i == 16) {
       continue;
     }
     copy_key(selected_key, &layers[16].keys[key_index]);
   }
-  return err;
+  return ERR_NONE;
 }
 
 // quantum_passthrough_release does not take extra arguments.
@@ -117,22 +119,26 @@ enum squirrel_error quantum_passthrough_release(struct key *key, uint8_t layer,
   if (layer == 0) {
     return ERR_PASSTHROUGH_ON_BOTTOM_LAYER;
   };
-  enum squirrel_error err;
-  for (uint8_t i = layer - 1; i >= 0; i--) {
+  for (uint8_t i = layer - 1; i != 255; i--) {
     if (!layers[i].active) {
       continue;
     }
     struct key *selected_key = &(layers[i].keys[key_index]);
-    err = selected_key->released(selected_key, i, key_index,
-                                 selected_key->released_argument_count,
-                                 selected_key->released_arguments);
+    enum squirrel_error err = selected_key->released(
+        selected_key, i, key_index, selected_key->released_argument_count,
+        selected_key->released_arguments);
+    if (err != ERR_NONE) {
+      return err;
+    }
     if (i != 16) {
       continue;
     }
     struct key passthrough_key;
     passthrough_key.pressed = quantum_passthrough_press;
+    passthrough_key.pressed_argument_count = 0;
     passthrough_key.released = quantum_passthrough_release;
+    passthrough_key.released_argument_count = 0;
     copy_key(&passthrough_key, &layers[16].keys[key_index]);
   }
-  return err;
+  return ERR_NONE;
 }
