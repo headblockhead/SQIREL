@@ -25,7 +25,7 @@ enum squirrel_error keyboard_press(struct key *key, uint8_t layer,
     return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
   };
   uint8_t keycode = va_arg(args, int);
-  activate_keycode(keycode); // squirrel_keyboard
+  keyboard_activate_keycode(keycode); // squirrel_keyboard
   va_end(args);
   return ERR_NONE;
 };
@@ -41,7 +41,7 @@ enum squirrel_error keyboard_release(struct key *key, uint8_t layer,
     return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
   };
   uint8_t keycode = va_arg(args, int);
-  deactivate_keycode(keycode); // squirrel_keyboard
+  keyboard_deactivate_keycode(keycode); // squirrel_keyboard
   va_end(args);
   return ERR_NONE;
 }
@@ -58,7 +58,7 @@ enum squirrel_error keyboard_modifier_press(struct key *key, uint8_t layer,
     return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
   };
   uint8_t modifier = va_arg(args, int);
-  activate_modifier(modifier); // squirrel_keyboard
+  keyboard_activate_modifier(modifier); // squirrel_keyboard
   va_end(args);
   return ERR_NONE;
 }
@@ -75,7 +75,7 @@ enum squirrel_error keyboard_modifier_release(struct key *key, uint8_t layer,
     return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
   };
   uint8_t modifier = va_arg(args, int);
-  deactivate_modifier(modifier); // squirrel_keyboard
+  keyboard_deactivate_modifier(modifier); // squirrel_keyboard
   va_end(args);
   return ERR_NONE;
 }
