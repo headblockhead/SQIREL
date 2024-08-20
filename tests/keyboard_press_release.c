@@ -2,34 +2,59 @@
 #include "squirrel_key.h"
 #include "squirrel_quantum.h"
 
-// test: keyboard_press + keyboard_release test - in squirrel_quantum.c
+// test: keyboard_press + keyboard_release - in squirrel_quantum.c
 int main() {
-  // keyboard_press
   struct key test_key; // values unused
-  for (uint8_t keycode; keycode <= 127; keycode++) {
+  enum squirrel_error err;
+  for (uint8_t keycode = 0; keycode != 255; keycode++) {
+    // keyboard_press
     // Off becomes on
-    keycodes[keycode] = false;
-    keyboard_press(&test_key, 0, 0, 1, keycode);
-    if (keycodes[keycode] != true) {
+    keyboard_keycodes[keycode] = false;
+    err = keyboard_press(&test_key, 0, 0, 1, keycode);
+    if (err != ERR_NONE) {
       return 1;
     }
-    // On stays on
-    keyboard_press(&test_key, 0, 0, 1, keycode);
-    if (keycodes[keycode] != true) {
+    if (keyboard_keycodes[keycode] != true) {
       return 2;
     }
-
-    // On becomes off
-    keycodes[keycode] = true;
-    keyboard_release(&test_key, 0, 0, 1, keycode);
-    if (keycodes[keycode] != false) {
+    // On stays on
+    err = keyboard_press(&test_key, 0, 0, 1, keycode);
+    if (err != ERR_NONE) {
       return 3;
     }
-    // Off stays off
-    keyboard_release(&test_key, 0, 0, 1, keycode);
-    if (keycodes[keycode] != false) {
+    if (keyboard_keycodes[keycode] != true) {
       return 4;
     }
+
+    // keyboard_release
+    // On becomes off
+    keyboard_keycodes[keycode] = true;
+    err = keyboard_release(&test_key, 0, 0, 1, keycode);
+    if (err != ERR_NONE) {
+      return 5;
+    }
+    if (keyboard_keycodes[keycode] != false) {
+      return 6;
+    }
+    // Off stays off
+    err = keyboard_release(&test_key, 0, 0, 1, keycode);
+    if (err != ERR_NONE) {
+      return 7;
+    }
+    if (keyboard_keycodes[keycode] != false) {
+      return 8;
+    }
   }
+
+  // Test expected errors
+  err = consumer_press(&test_key, 0, 0, 0, 0);
+  if (err != ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT) {
+    return 9;
+  }
+  err = consumer_release(&test_key, 0, 0, 0, 0);
+  if (err != ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT) {
+    return 10;
+  }
+
   return 0;
 };

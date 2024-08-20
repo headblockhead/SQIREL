@@ -1,5 +1,6 @@
 #include "squirrel_quantum.h"
 #include "squirrel.h"
+#include "squirrel_consumer.h"
 #include "squirrel_key.h"
 #include "squirrel_keyboard.h"
 #include <stdarg.h>
@@ -76,6 +77,38 @@ enum squirrel_error keyboard_modifier_release(struct key *key, uint8_t layer,
   };
   uint8_t modifier = va_arg(args, int);
   keyboard_deactivate_modifier(modifier); // squirrel_keyboard
+  va_end(args);
+  return ERR_NONE;
+}
+
+enum squirrel_error consumer_press(struct key *key, uint8_t layer,
+                                   uint8_t key_index, int arg_count, ...) {
+  (void)layer;
+  (void)key_index;
+
+  va_list args;
+  va_start(args, arg_count);
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  uint16_t consumer_code = va_arg(args, int);
+  consumer_activate_consumer_code(consumer_code); // squirrel_consumer
+  va_end(args);
+  return ERR_NONE;
+}
+
+enum squirrel_error consumer_release(struct key *key, uint8_t layer,
+                                     uint8_t key_index, int arg_count, ...) {
+  (void)layer;
+  (void)key_index;
+
+  va_list args;
+  va_start(args, arg_count);
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  uint16_t consumer_code = va_arg(args, int);
+  consumer_deactivate_consumer_code(consumer_code); // squirrel_consumer
   va_end(args);
   return ERR_NONE;
 }

@@ -37,6 +37,16 @@ enum squirrel_error keyboard_modifier_release(struct key *key, uint8_t layer,
                                               uint8_t key_index, int arg_count,
                                               ...);
 
+// consumer_press expects a single uint16 consumer code. See
+// https://www.freebsddiary.org/APC/usb_hid_usages for all defined codes.
+enum squirrel_error consumer_press(struct key *key, uint8_t layer,
+                                   uint8_t key_index, int arg_count, ...);
+
+// consumer_release expects a single uint16 consumer code. See
+// https://www.freebsddiary.org/APC/usb_hid_usages for all defined codes.
+enum squirrel_error consumer_release(struct key *key, uint8_t layer,
+                                     uint8_t key_index, int arg_count, ...);
+
 // quantum_passthrough passes the press action to the highest active layer below
 // the current one. It expectes no extra args.
 enum squirrel_error quantum_passthrough_press(struct key *key, uint8_t layer,

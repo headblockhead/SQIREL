@@ -31,6 +31,14 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Testing")
         add_executable(quantum_passthrough_press_release tests/quantum_passthrough_press_release.c)
         target_link_libraries(quantum_passthrough_press_release squirrel)
         add_test(NAME quantum_passthrough_press_release COMMAND quantum_passthrough_press_release)
+
+        add_executable(keyboard_get_keycodes tests/keyboard_get_keycodes.c)
+        target_link_libraries(keyboard_get_keycodes squirrel)
+        add_test(NAME keyboard_get_keycodes COMMAND keyboard_get_keycodes)
+
+        add_executable(consumer_press_release tests/consumer_press_release.c)
+        target_link_libraries(consumer_press_release squirrel)
+        add_test(NAME consumer_press_release COMMAND consumer_press_release)
 else()
        add_compile_options(-Os) # Enable size optimizations
 endif()
