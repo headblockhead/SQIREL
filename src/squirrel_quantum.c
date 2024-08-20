@@ -3,120 +3,95 @@
 #include "squirrel_consumer.h"
 #include "squirrel_key.h"
 #include "squirrel_keyboard.h"
-#include <stdarg.h>
 #include <stdint.h>
 
 struct layer layers[17];
 
 enum squirrel_error key_nop(struct key *key, uint8_t layer, uint8_t key_index,
-                            int arg_count, ...) {
+                            int arg_count, void **args) {
   (void)key;
   (void)arg_count;
+  (void)args;
   return ERR_NONE;
 }
 
 enum squirrel_error keyboard_press(struct key *key, uint8_t layer,
-                                   uint8_t key_index, int arg_count, ...) {
+                                   uint8_t key_index, int arg_count,
+                                   void **args) {
   (void)layer;
   (void)key_index;
-
-  va_list args;
-  va_start(args, arg_count);
   if (arg_count != 1) {
     return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
   };
-  uint8_t keycode = va_arg(args, int);
-  keyboard_activate_keycode(keycode); // squirrel_keyboard
-  va_end(args);
+
+  keyboard_activate_keycode(*(uint8_t *)args[0]); // squirrel_keyboard
   return ERR_NONE;
 };
 
 enum squirrel_error keyboard_release(struct key *key, uint8_t layer,
-                                     uint8_t key_index, int arg_count, ...) {
+                                     uint8_t key_index, int arg_count,
+                                     void **args) {
   (void)layer;
   (void)key_index;
-
-  va_list args;
-  va_start(args, arg_count);
   if (arg_count != 1) {
     return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
   };
-  uint8_t keycode = va_arg(args, int);
-  keyboard_deactivate_keycode(keycode); // squirrel_keyboard
-  va_end(args);
+  keyboard_deactivate_keycode(*(uint8_t *)args[0]); // squirrel_keyboard
   return ERR_NONE;
 }
 
 enum squirrel_error keyboard_modifier_press(struct key *key, uint8_t layer,
                                             uint8_t key_index, int arg_count,
-                                            ...) {
+                                            void **args) {
   (void)layer;
   (void)key_index;
-
-  va_list args;
-  va_start(args, arg_count);
   if (arg_count != 1) {
     return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
   };
-  uint8_t modifier = va_arg(args, int);
-  keyboard_activate_modifier(modifier); // squirrel_keyboard
-  va_end(args);
+  keyboard_activate_modifier(*(uint8_t *)args[0]); // squirrel_keyboard
   return ERR_NONE;
 }
 
 enum squirrel_error keyboard_modifier_release(struct key *key, uint8_t layer,
                                               uint8_t key_index, int arg_count,
-                                              ...) {
+                                              void **args) {
   (void)layer;
   (void)key_index;
-
-  va_list args;
-  va_start(args, arg_count);
   if (arg_count != 1) {
     return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
   };
-  uint8_t modifier = va_arg(args, int);
-  keyboard_deactivate_modifier(modifier); // squirrel_keyboard
-  va_end(args);
+  keyboard_deactivate_modifier(*(uint8_t *)args[0]); // squirrel_keyboard
   return ERR_NONE;
 }
 
 enum squirrel_error consumer_press(struct key *key, uint8_t layer,
-                                   uint8_t key_index, int arg_count, ...) {
+                                   uint8_t key_index, int arg_count,
+                                   void **args) {
   (void)layer;
   (void)key_index;
-
-  va_list args;
-  va_start(args, arg_count);
   if (arg_count != 1) {
     return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
   };
-  uint16_t consumer_code = va_arg(args, int);
-  consumer_activate_consumer_code(consumer_code); // squirrel_consumer
-  va_end(args);
+  consumer_activate_consumer_code(*(uint16_t *)args[0]); // squirrel_consumer
   return ERR_NONE;
 }
 
 enum squirrel_error consumer_release(struct key *key, uint8_t layer,
-                                     uint8_t key_index, int arg_count, ...) {
+                                     uint8_t key_index, int arg_count,
+                                     void **args) {
   (void)layer;
   (void)key_index;
-
-  va_list args;
-  va_start(args, arg_count);
   if (arg_count != 1) {
     return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
   };
-  uint16_t consumer_code = va_arg(args, int);
-  consumer_deactivate_consumer_code(consumer_code); // squirrel_consumer
-  va_end(args);
+  consumer_deactivate_consumer_code(*(uint16_t *)args[0]); // squirrel_consumer
   return ERR_NONE;
 }
 
 // quantum_passthrough_press does not take extra arguments.
 enum squirrel_error quantum_passthrough_press(struct key *key, uint8_t layer,
                                               uint8_t key_index, int arg_count,
-                                              ...) {
+                                              void **args) {
   if (arg_count != 0) {
     return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
   };
@@ -145,7 +120,7 @@ enum squirrel_error quantum_passthrough_press(struct key *key, uint8_t layer,
 // quantum_passthrough_release does not take extra arguments.
 enum squirrel_error quantum_passthrough_release(struct key *key, uint8_t layer,
                                                 uint8_t key_index,
-                                                int arg_count, ...) {
+                                                int arg_count, void **args) {
   if (arg_count != 0) {
     return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
   };

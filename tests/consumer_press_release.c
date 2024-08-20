@@ -2,17 +2,21 @@
 #include "squirrel_consumer.h"
 #include "squirrel_key.h"
 #include "squirrel_quantum.h"
+#include <stdint.h>
+#include <stdlib.h>
 
 // test: consumer_press + consumer_release - in squirrel_quantum.c
 int main() {
   struct key test_key; // values unused
   enum squirrel_error err;
+  void **args = malloc(sizeof(void *));
   for (uint16_t test_consumer_code = 0; test_consumer_code <= 65534;
        test_consumer_code++) {
+    args[0] = &test_consumer_code;
     // consumer_press
     // no code becomes a code
     consumer_code = 0;
-    err = consumer_press(&test_key, 0, 0, 1, test_consumer_code);
+    err = consumer_press(&test_key, 0, 0, 1, args);
     if (err != ERR_NONE) {
       return 1;
     }
@@ -20,7 +24,7 @@ int main() {
       return 2;
     }
     // a code stays a code
-    err = consumer_press(&test_key, 0, 0, 1, test_consumer_code);
+    err = consumer_press(&test_key, 0, 0, 1, args);
     if (err != ERR_NONE) {
       return 3;
     }
@@ -29,7 +33,7 @@ int main() {
     }
     // another code becomes a code
     consumer_code = 0xFFFF;
-    err = consumer_press(&test_key, 0, 0, 1, test_consumer_code);
+    err = consumer_press(&test_key, 0, 0, 1, args);
     if (err != ERR_NONE) {
       return 5;
     }
@@ -40,7 +44,7 @@ int main() {
     // consumer_release
     // a code becomes no code
     consumer_code = test_consumer_code;
-    err = consumer_release(&test_key, 0, 0, 1, test_consumer_code);
+    err = consumer_release(&test_key, 0, 0, 1, args);
     if (err != ERR_NONE) {
       return 7;
     }
@@ -49,7 +53,7 @@ int main() {
     }
     // another code stays another code
     consumer_code = 0xFFFF;
-    err = consumer_release(&test_key, 0, 0, 1, test_consumer_code);
+    err = consumer_release(&test_key, 0, 0, 1, args);
     if (err != ERR_NONE) {
       return 9;
     }

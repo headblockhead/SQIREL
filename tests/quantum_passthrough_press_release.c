@@ -42,17 +42,17 @@ int main() {
 
   enum squirrel_error err = press_key(0);
   if (err != ERR_NONE) {
-    return 1;
+    return 2;
   }
 
   if (test_result != 0) {
-    return 2;
+    return 3;
   }
 
   test_result = 1;
   err = release_key(0);
   if (err != ERR_NONE) {
-    return 3;
+    return 4;
   }
 
   return test_result;

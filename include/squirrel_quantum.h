@@ -17,46 +17,50 @@ extern struct layer layers[17];
 
 // key_nop does nothing (no operation)
 enum squirrel_error key_nop(struct key *key, uint8_t layer, uint8_t key_index,
-                            int arg_count, ...);
+                            int arg_count, void **args);
 
 // keyboard_press expects a single uint8 keycode
 enum squirrel_error keyboard_press(struct key *key, uint8_t layer,
-                                   uint8_t key_index, int arg_count, ...);
+                                   uint8_t key_index, int arg_count,
+                                   void **args);
 
 // keyboard_release expects a single uint8 keycode
 enum squirrel_error keyboard_release(struct key *key, uint8_t layer,
-                                     uint8_t key_index, int arg_count, ...);
+                                     uint8_t key_index, int arg_count,
+                                     void **args);
 
 // keyboard_modifier_press expects a single uint8 modifier
 enum squirrel_error keyboard_modifier_press(struct key *key, uint8_t layer,
                                             uint8_t key_index, int arg_count,
-                                            ...);
+                                            void **args);
 
 // keyboard_modifier_release expects a single uint8 modifier
 enum squirrel_error keyboard_modifier_release(struct key *key, uint8_t layer,
                                               uint8_t key_index, int arg_count,
-                                              ...);
+                                              void **args);
 
 // consumer_press expects a single uint16 consumer code. See
 // https://www.freebsddiary.org/APC/usb_hid_usages for all defined codes.
 enum squirrel_error consumer_press(struct key *key, uint8_t layer,
-                                   uint8_t key_index, int arg_count, ...);
+                                   uint8_t key_index, int arg_count,
+                                   void **args);
 
 // consumer_release expects a single uint16 consumer code. See
 // https://www.freebsddiary.org/APC/usb_hid_usages for all defined codes.
 enum squirrel_error consumer_release(struct key *key, uint8_t layer,
-                                     uint8_t key_index, int arg_count, ...);
+                                     uint8_t key_index, int arg_count,
+                                     void **args);
 
 // quantum_passthrough passes the press action to the highest active layer below
 // the current one. It expectes no extra args.
 enum squirrel_error quantum_passthrough_press(struct key *key, uint8_t layer,
                                               uint8_t key_index, int arg_count,
-                                              ...);
+                                              void **args);
 
 // quantum_passthrough_release passes the release action to the highest active
 // layer below the current one. It expectes no extra args.
 enum squirrel_error quantum_passthrough_release(struct key *key, uint8_t layer,
                                                 uint8_t key_index,
-                                                int arg_count, ...);
+                                                int arg_count, void **args);
 
 #endif
