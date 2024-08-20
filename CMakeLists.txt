@@ -8,7 +8,29 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
         add_compile_options(-Og) # Enable debug optimizations
 elseif(CMAKE_BUILD_TYPE STREQUAL "Testing")
         message(STATUS "Testing enabled")
-        add_subdirectory(tests)
+        include(CTest)
+        enable_testing()
+
+        include_directories(include)
+
+        list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModules")
+        if(CMAKE_COMPILER_IS_GNUCXX)
+            include(CodeCoverage)
+            APPEND_COVERAGE_COMPILER_FLAGS()
+            setup_target_for_coverage_gcovr_html(squirrel squirrel_test coverage)
+        endif()
+
+        add_executable(keyboard_press_release tests/keyboard_press_release.c)
+        target_link_libraries(keyboard_press_release squirrel)
+        add_test(NAME keyboard_press_release COMMAND keyboard_press_release)
+
+        add_executable(keyboard_modifier_press_release tests/keyboard_modifier_press_release.c)
+        target_link_libraries(keyboard_modifier_press_release squirrel)
+        add_test(NAME keyboard_modifier_press_release COMMAND keyboard_modifier_press_release)
+
+        add_executable(quantum_passthrough_press_release tests/quantum_passthrough_press_release.c)
+        target_link_libraries(quantum_passthrough_press_release squirrel)
+        add_test(NAME quantum_passthrough_press_release COMMAND quantum_passthrough_press_release)
 else()
        add_compile_options(-Os) # Enable size optimizations
 endif()

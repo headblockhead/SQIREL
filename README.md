@@ -47,8 +47,7 @@ Tests the library
 ```bash
 cmake -DCMAKE_BUILD_TYPE=Testing ..
 make -j4
-cd tests
-ctest
+ctest -T Test -T Coverage .
 ```
 
 ### Clean
