@@ -27,6 +27,7 @@
           devShells.default = pkgs.mkShell {
             buildInputs = with pkgs; [
               xc
+              gcovr
               cmake
               gcc
               ccls

@@ -3,6 +3,7 @@
 , gnumake
 , cmake
 , stdenv
+, gcovr
 }:
 
 stdenv.mkDerivation {
@@ -11,7 +12,7 @@ stdenv.mkDerivation {
 
   src = ./.;
 
-  nativeBuildInputs = [ cmake gnumake ];
+  nativeBuildInputs = [ cmake gnumake gcovr ];
   buildInputs = [ ];
 
   cmakeFlags = [
@@ -21,8 +22,7 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
-    cd tests
-    ctest --timeout 60 # tests should never take longer than 60 seconds each to complete.
+    ctest -T Test -T Coverage --timeout 60 # tests should never take longer than 60 seconds each to complete.
     cp -r . $out'';
 
   meta = with lib; {
