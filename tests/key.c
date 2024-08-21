@@ -82,50 +82,61 @@ int main() {
     return 5;
   }
 
-  free(testkey.pressed_arguments);
-  free(testkey.released_arguments);
-
   // check_key
-
   test_result = 1;
-  testkey.is_pressed = false;
-  check_key(0, true); // should call press_key
-  if (test_result != 0) {
+  key_states[0] = false;
+  err = check_key(0, true); // should call press_key
+  if (err != ERR_NONE) {
     return 6;
   }
-  if (testkey.is_pressed != true) {
+  if (test_result != 0) {
     return 7;
   }
-
-  test_result = 1;
-  testkey.is_pressed = true;
-  check_key(0, false); // should call release_key
-  if (test_result != 0) {
+  if (key_states[0] != true) {
     return 8;
   }
-  if (testkey.is_pressed != false) {
-    return 9;
-  }
 
   test_result = 1;
-  testkey.is_pressed = true;
-  check_key(0, true); // should not call press_key
-  if (test_result != 1) {
+  key_states[0] = true;
+  err = check_key(0, false); // should call release_key
+  if (err != ERR_NONE) {
+    return 9;
+  }
+  if (test_result != 0) {
     return 10;
   }
-  if (testkey.is_pressed != true) {
+  if (key_states[0] != false) {
     return 11;
   }
 
   test_result = 1;
-  testkey.is_pressed = false;
-  check_key(0, false); // should not call release_key
-  if (test_result != 1) {
+  key_states[0] = true;
+  err = check_key(0, true); // should not call press_key
+  if (err != ERR_NONE) {
     return 12;
   }
-  if (testkey.is_pressed != false) {
+  if (test_result != 1) {
     return 13;
   }
+  if (key_states[0] != true) {
+    return 14;
+  }
+
+  test_result = 1;
+  key_states[0] = false;
+  err = check_key(0, false); // should not call release_key
+  if (err != ERR_NONE) {
+    return 15;
+  }
+  if (test_result != 1) {
+    return 16;
+  }
+  if (key_states[0] != false) {
+    return 17;
+  }
+
+  free(testkey.pressed_arguments);
+  free(testkey.released_arguments);
 
   return 0;
 }

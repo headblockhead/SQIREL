@@ -19,5 +19,6 @@ enum squirrel_error init_keyboard(int total_keys) {
       copy_key(&passthrough_key, &(layers[j].keys[i]));
     }
   }
+  key_states = (bool *)malloc(total_keys * sizeof(bool));
   return ERR_NONE;
 };

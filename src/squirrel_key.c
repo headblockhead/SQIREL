@@ -54,20 +54,18 @@ enum squirrel_error release_key(uint8_t key_index) {
   return ERR_NONE;
 }
 
+bool *key_states;
+
 enum squirrel_error check_key(uint8_t key_index, bool is_pressed) {
   enum squirrel_error err;
-  for (uint8_t i = 0; i < 17; i++) {
-    bool was_pressed = layers[i].keys[key_index].is_pressed;
-    if (was_pressed == is_pressed) {
-      continue;
-    }
-    if (is_pressed) {
-      err = press_key(key_index);
-      layers[i].keys[key_index].is_pressed = true;
-    } else {
-      err = release_key(key_index);
-      layers[i].keys[key_index].is_pressed = false;
-    }
+  if (key_states[key_index] == is_pressed) {
+    return ERR_NONE;
   }
-  return err;
+  if (is_pressed) {
+    key_states[key_index] = true;
+    return press_key(key_index);
+  }
+  key_states[key_index] = false;
+  return release_key(key_index);
+  return ERR_NONE;
 }
