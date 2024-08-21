@@ -7,13 +7,14 @@
 uint8_t test_result = 1;
 
 enum squirrel_error test_press(struct key *key, uint8_t layer,
-                               uint8_t key_index, int arg_count, ...) {
+                               uint8_t key_index, int arg_count, void **args) {
   test_result = 0;
   return ERR_NONE;
 }
 
 enum squirrel_error test_release(struct key *key, uint8_t layer,
-                                 uint8_t key_index, int arg_count, ...) {
+                                 uint8_t key_index, int arg_count,
+                                 void **args) {
   test_result = 0;
   return ERR_NONE;
 }

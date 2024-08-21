@@ -43,6 +43,10 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Testing")
         add_executable(key tests/key.c)
         target_link_libraries(key squirrel)
         add_test(NAME key COMMAND key)
+
+        add_executable(layer_press_release tests/layer_press_release.c)
+        target_link_libraries(layer_press_release squirrel)
+        add_test(NAME layer_press_release COMMAND layer_press_release)
 else()
        add_compile_options(-Os) # Enable size optimizations
 endif()

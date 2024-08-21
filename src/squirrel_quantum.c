@@ -150,3 +150,39 @@ enum squirrel_error quantum_passthrough_release(struct key *key, uint8_t layer,
   }
   return ERR_NONE;
 }
+
+enum squirrel_error layer_momentary_press(struct key *key, uint8_t layer,
+                                          uint8_t key_index, int arg_count,
+                                          void **args) {
+  return ERR_NONE;
+}
+
+enum squirrel_error layer_momentary_release(struct key *key, uint8_t layer,
+                                            uint8_t key_index, int arg_count,
+                                            void **args) {
+  return ERR_NONE;
+}
+
+enum squirrel_error layer_toggle_press(struct key *key, uint8_t layer,
+                                       uint8_t key_index, int arg_count,
+                                       void **args) {
+  return ERR_NONE;
+}
+
+enum squirrel_error layer_toggle_release(struct key *key, uint8_t layer,
+                                         uint8_t key_index, int arg_count,
+                                         void **args) {
+  return ERR_NONE;
+}
+
+enum squirrel_error layer_turn_on_press(struct key *key, uint8_t layer,
+                                        uint8_t key_index, int arg_count,
+                                        void **args) {
+  return ERR_NONE;
+}
+
+enum squirrel_error layer_turn_on_release(struct key *key, uint8_t layer,
+                                          uint8_t key_index, int arg_count,
+                                          void **args) {
+  return ERR_NONE;
+}

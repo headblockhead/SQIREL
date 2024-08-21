@@ -51,8 +51,8 @@ enum squirrel_error consumer_release(struct key *key, uint8_t layer,
                                      uint8_t key_index, int arg_count,
                                      void **args);
 
-// quantum_passthrough passes the press action to the highest active layer below
-// the current one. It expectes no extra args.
+// quantum_passthrough_press passes the press action to the highest active layer
+// below the current one. It expectes no extra args.
 enum squirrel_error quantum_passthrough_press(struct key *key, uint8_t layer,
                                               uint8_t key_index, int arg_count,
                                               void **args);
@@ -63,4 +63,37 @@ enum squirrel_error quantum_passthrough_release(struct key *key, uint8_t layer,
                                                 uint8_t key_index,
                                                 int arg_count, void **args);
 
+// layer_momentary_press activates the layer with the given index. It expects
+// the layer number as the first uint8 argument.
+enum squirrel_error layer_momentary_press(struct key *key, uint8_t layer,
+                                          uint8_t key_index, int arg_count,
+                                          void **args);
+
+// layer_momentary_release deactivates the layer with the given index. It
+// expects the layer number as the first uint8 argument.
+enum squirrel_error layer_momentary_release(struct key *key, uint8_t layer,
+                                            uint8_t key_index, int arg_count,
+                                            void **args);
+
+// layer_toggle_press toggles the layer with the given index. It expects the
+// layer number as the first uint8 argument.
+enum squirrel_error layer_toggle_press(struct key *key, uint8_t layer,
+                                       uint8_t key_index, int arg_count,
+                                       void **args);
+
+// layer_toggle_release does nothing at the moment.
+enum squirrel_error layer_toggle_release(struct key *key, uint8_t layer,
+                                         uint8_t key_index, int arg_count,
+                                         void **args);
+
+// layer_turn_on_press activates the layer with the given index. It expects the
+// layer number as the first uint8 argument.
+enum squirrel_error layer_turn_on_press(struct key *key, uint8_t layer,
+                                        uint8_t key_index, int arg_count,
+                                        void **args);
+
+// layer_turn_on_release does nothing at the moment.
+enum squirrel_error layer_turn_on_release(struct key *key, uint8_t layer,
+                                          uint8_t key_index, int arg_count,
+                                          void **args);
 #endif
