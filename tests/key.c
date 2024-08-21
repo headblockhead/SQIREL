@@ -45,7 +45,6 @@ int main() {
   init_keyboard(1);
 
   // press_key + release_key
-
   uint8_t code1 = 0x0F;
   uint8_t code2 = 0xF0;
 
@@ -65,6 +64,7 @@ int main() {
   layers[0].keys[0] = testkey;
   layers[0].active = true;
 
+  // check that arguments are correct, and in the correct order.
   enum squirrel_error err = press_key(0);
   if (err != ERR_NONE) {
     return 2;
@@ -78,11 +78,54 @@ int main() {
   if (err != ERR_NONE) {
     return 4;
   }
+  if (test_result != 0) {
+    return 5;
+  }
 
   free(testkey.pressed_arguments);
   free(testkey.released_arguments);
 
-  // TODO: check_key
+  // check_key
 
-  return test_result;
+  test_result = 1;
+  testkey.is_pressed = false;
+  check_key(0, true); // should call press_key
+  if (test_result != 0) {
+    return 6;
+  }
+  if (testkey.is_pressed != true) {
+    return 7;
+  }
+
+  test_result = 1;
+  testkey.is_pressed = true;
+  check_key(0, false); // should call release_key
+  if (test_result != 0) {
+    return 8;
+  }
+  if (testkey.is_pressed != false) {
+    return 9;
+  }
+
+  test_result = 1;
+  testkey.is_pressed = true;
+  check_key(0, true); // should not call press_key
+  if (test_result != 1) {
+    return 10;
+  }
+  if (testkey.is_pressed != true) {
+    return 11;
+  }
+
+  test_result = 1;
+  testkey.is_pressed = false;
+  check_key(0, false); // should not call release_key
+  if (test_result != 1) {
+    return 12;
+  }
+  if (testkey.is_pressed != false) {
+    return 13;
+  }
+
+  return 0;
 }

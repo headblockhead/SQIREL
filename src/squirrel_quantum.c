@@ -154,35 +154,64 @@ enum squirrel_error quantum_passthrough_release(struct key *key, uint8_t layer,
 enum squirrel_error layer_momentary_press(struct key *key, uint8_t layer,
                                           uint8_t key_index, int arg_count,
                                           void **args) {
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  uint8_t target_layer = *(uint8_t *)args[0];
+  layers[target_layer].active = true;
   return ERR_NONE;
 }
 
 enum squirrel_error layer_momentary_release(struct key *key, uint8_t layer,
                                             uint8_t key_index, int arg_count,
                                             void **args) {
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  uint8_t target_layer = *(uint8_t *)args[0];
+  layers[target_layer].active = false;
   return ERR_NONE;
 }
 
 enum squirrel_error layer_toggle_press(struct key *key, uint8_t layer,
                                        uint8_t key_index, int arg_count,
                                        void **args) {
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  uint8_t target_layer = *(uint8_t *)args[0];
+  layers[target_layer].active = !layers[target_layer].active;
   return ERR_NONE;
 }
 
 enum squirrel_error layer_toggle_release(struct key *key, uint8_t layer,
                                          uint8_t key_index, int arg_count,
                                          void **args) {
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
   return ERR_NONE;
 }
 
-enum squirrel_error layer_turn_on_press(struct key *key, uint8_t layer,
-                                        uint8_t key_index, int arg_count,
-                                        void **args) {
+enum squirrel_error layer_solo_press(struct key *key, uint8_t layer,
+                                     uint8_t key_index, int arg_count,
+                                     void **args) {
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  uint8_t target_layer = *(uint8_t *)args[0];
+  for (uint8_t i = 0; i < 16; i++) {
+    layers[i].active = false;
+  }
+  layers[target_layer].active = true;
   return ERR_NONE;
 }
 
-enum squirrel_error layer_turn_on_release(struct key *key, uint8_t layer,
-                                          uint8_t key_index, int arg_count,
-                                          void **args) {
+enum squirrel_error layer_solo_release(struct key *key, uint8_t layer,
+                                       uint8_t key_index, int arg_count,
+                                       void **args) {
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
   return ERR_NONE;
 }

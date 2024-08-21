@@ -47,6 +47,18 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Testing")
         add_executable(layer_press_release tests/layer_press_release.c)
         target_link_libraries(layer_press_release squirrel)
         add_test(NAME layer_press_release COMMAND layer_press_release)
+
+        add_executable(consumer_activate_deactivate_get_consumer_code tests/consumer_activate_deactivate_get_consumer_code.c)
+        target_link_libraries(consumer_activate_deactivate_get_consumer_code squirrel)
+        add_test(NAME consumer_activate_deactivate_get_consumer_code COMMAND consumer_activate_deactivate_get_consumer_code)
+
+        add_executable(keyboard_activate_deactivate_keycode tests/keyboard_activate_deactivate_keycode.c)
+        target_link_libraries(keyboard_activate_deactivate_keycode squirrel)
+        add_test(NAME keyboard_activate_deactivate_keycode COMMAND keyboard_activate_deactivate_keycode)
+
+        add_executable(keyboard_activate_deactivate_get_modifier tests/keyboard_activate_deactivate_get_modifier.c)
+        target_link_libraries(keyboard_activate_deactivate_get_modifier squirrel)
+        add_test(NAME keyboard_activate_deactivate_get_modifier COMMAND keyboard_activate_deactivate_get_modifier)
 else()
        add_compile_options(-Os) # Enable size optimizations
 endif()
