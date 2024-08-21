@@ -22,3 +22,11 @@ enum squirrel_error init_keyboard(int total_keys) {
   key_states = (bool *)malloc(total_keys * sizeof(bool));
   return ERR_NONE;
 };
+
+enum squirrel_error deinit_keyboard() {
+  for (uint8_t j = 16; j != 255; j--) {
+    free(layers[j].keys);
+  }
+  free(key_states);
+  return ERR_NONE;
+};
