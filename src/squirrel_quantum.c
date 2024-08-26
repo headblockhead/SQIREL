@@ -1,174 +1,217 @@
-#include <stdbool.h>
+#include "squirrel_quantum.h"
+#include "squirrel.h"
+#include "squirrel_consumer.h"
+#include "squirrel_key.h"
+#include "squirrel_keyboard.h"
 #include <stdint.h>
 
-#include "squirrel_quantum.h"
+struct layer layers[17];
 
-#include "squirrel_keys.h"
-#include "squirrel_types.h"
-
-bool custom_code_active = false;
-uint16_t custom_code_buffer = 0; // entered in binary - 8 bit keycode, 16 bit
-                                 // media code.
-uint8_t custom_code_buffer_index = 0;
-
-bool layers[16] = {true,  false, false, false, false, false, false, false,
-                   false, false, false, false, false, false, false, false};
-
-uint8_t default_layer = 0;
-
-void noop(struct key *key, uint16_t arg, uint8_t layer) {
+enum squirrel_error key_nop(struct key *key, uint8_t layer, uint8_t key_index,
+                            int arg_count, void **args) {
   (void)key;
-  (void)arg;
-  (void)layer;
+  (void)arg_count;
+  (void)args;
+  return ERR_NONE;
 }
 
-void key_down(struct key *key, uint16_t keycode, uint8_t layer) {
-  (void)key;
+enum squirrel_error keyboard_press(struct key *key, uint8_t layer,
+                                   uint8_t key_index, int arg_count,
+                                   void **args) {
   (void)layer;
-  keycode = keycode & 0xFF; // Mask the keycode to only the lower byte.
+  (void)key_index;
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
 
-  if (custom_code_active) {
-    if (custom_code_buffer_index > 15) {
-      custom_code_buffer_index = 0;
-    }
-    switch (keycode) {
-    case 0x27: // 0
-      custom_code_buffer = custom_code_buffer << 1;
-      custom_code_buffer |= 0;
-      custom_code_buffer_index++;
-      break;
-    case 0x1E: // 1
-      custom_code_buffer = custom_code_buffer << 1;
-      custom_code_buffer |= 1;
-      custom_code_buffer_index++;
-      break;
-    case 0x28: // ENTER
-      if (custom_code_buffer_index > 8) {
-        active_media_code = custom_code_buffer;
-      } else {
-        active_keycodes[custom_code_buffer] = true;
-      }
-      break;
-    }
-    return;
-  }
+  keyboard_activate_keycode(*(uint8_t *)args[0]); // squirrel_keyboard
+  return ERR_NONE;
+};
 
-  active_keycodes[keycode] = true; // Mark the keycode as active.
+enum squirrel_error keyboard_release(struct key *key, uint8_t layer,
+                                     uint8_t key_index, int arg_count,
+                                     void **args) {
+  (void)layer;
+  (void)key_index;
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  keyboard_deactivate_keycode(*(uint8_t *)args[0]); // squirrel_keyboard
+  return ERR_NONE;
 }
 
-void key_up(struct key *key, uint16_t keycode, uint8_t layer) {
-  (void)key;
+enum squirrel_error keyboard_modifier_press(struct key *key, uint8_t layer,
+                                            uint8_t key_index, int arg_count,
+                                            void **args) {
   (void)layer;
-  keycode = keycode & 0xFF;         // Mask the keycode to only the lower byte.
-  active_keycodes[keycode] = false; // Mark the keycode as inactive.
+  (void)key_index;
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  keyboard_activate_modifier(*(uint8_t *)args[0]); // squirrel_keyboard
+  return ERR_NONE;
 }
 
-void mod_down(struct key *key, uint16_t modifier_code, uint8_t layer) {
-  (void)key;
+enum squirrel_error keyboard_modifier_release(struct key *key, uint8_t layer,
+                                              uint8_t key_index, int arg_count,
+                                              void **args) {
   (void)layer;
-  modifier_code = modifier_code & 0xFF; // Mask the modifier code to only the
-                                        // lower byte.
-  modifiers |=
-      modifier_code; // OR the modifier code into the modifiers variable.
+  (void)key_index;
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  keyboard_deactivate_modifier(*(uint8_t *)args[0]); // squirrel_keyboard
+  return ERR_NONE;
 }
 
-void mod_up(struct key *key, uint16_t modifier_code, uint8_t layer) {
-  (void)key;
+enum squirrel_error consumer_press(struct key *key, uint8_t layer,
+                                   uint8_t key_index, int arg_count,
+                                   void **args) {
   (void)layer;
-  modifier_code = modifier_code & 0xFF; // Mask the modifier code to only the
-                                        // lower byte.
-  modifiers &= ~modifier_code; // AND the inverse of the modifier code into
-                               // the modifiers variable.
+  (void)key_index;
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  consumer_activate_consumer_code(*(uint16_t *)args[0]); // squirrel_consumer
+  return ERR_NONE;
 }
 
-void media_down(struct key *key, uint16_t media_code, uint8_t layer) {
-  (void)key;
+enum squirrel_error consumer_release(struct key *key, uint8_t layer,
+                                     uint8_t key_index, int arg_count,
+                                     void **args) {
   (void)layer;
-  active_media_code = media_code;
+  (void)key_index;
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  consumer_deactivate_consumer_code(*(uint16_t *)args[0]); // squirrel_consumer
+  return ERR_NONE;
 }
 
-void media_up(struct key *key, uint16_t media_code, uint8_t layer) {
-  (void)key;
-  (void)layer;
-  if (active_media_code == media_code) {
-    active_media_code = 0;
-  }
-}
-
-void custom_code_down(struct key *key, uint16_t arg, uint8_t layer) {
-  (void)key;
-  (void)arg;
-  (void)layer;
-  custom_code_buffer = 0;
-  custom_code_buffer_index = 0;
-  custom_code_active = true;
-}
-
-void custom_code_up(struct key *key, uint16_t arg, uint8_t layer) {
-  (void)key;
-  (void)arg;
-  (void)layer;
-  custom_code_active = false;
-  if (custom_code_buffer_index > 8) {
-    active_media_code = 0;
-  } else {
-    active_keycodes[custom_code_buffer] = false;
-  }
-}
-
-void pass_through_rising(struct key *key, uint16_t arg, uint8_t layer) {
-  (void)arg;
-  for (uint8_t i = layer - 1; i >= default_layer;
-       i--) { // Start at the layer below the current layer, go down until the
-              // default layer.
-    if (!layers[i]) { // If the layer is not active, skip it.
+// quantum_passthrough_press does not take extra arguments.
+enum squirrel_error quantum_passthrough_press(struct key *key, uint8_t layer,
+                                              uint8_t key_index, int arg_count,
+                                              void **args) {
+  if (arg_count != 0) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  if (layer == 0) {
+    return ERR_PASSTHROUGH_ON_BOTTOM_LAYER;
+  };
+  for (uint8_t i = layer - 1; i != 255; i--) {
+    if (!layers[i].active) {
       continue;
     }
-    key->rising[i](key, key->risingargs[i], i); // Call the rising function for
-                                                // the layer.
-    return;                                     // Stop looping through layers.
-  }
-}
-
-void pass_through_falling(struct key *key, uint16_t arg, uint8_t layer) {
-  (void)arg;
-  for (uint8_t i = layer - 1; i >= default_layer;
-       i--) { // Start at the layer below the current layer, go down until the
-              // default layer.
-    if (!layers[i]) { // If the layer is not active, skip it.
+    struct key *selected_key = &(layers[i].keys[key_index]);
+    enum squirrel_error err = selected_key->pressed(
+        selected_key, i, key_index, selected_key->pressed_argument_count,
+        selected_key->pressed_arguments);
+    if (err != ERR_NONE) {
+      return err;
+    }
+    if (i == 16) {
       continue;
     }
-    key->falling[i](key, key->fallingargs[i],
-                    i); // Call the falling function for the layer.
-    return;             // Stop looping through layers.
+    copy_key(selected_key, &layers[16].keys[key_index]);
   }
+  return ERR_NONE;
 }
 
-void momentary_rising(struct key *key, uint16_t target_layer, uint8_t layer) {
-  (void)key;
-  (void)layer;
-  layer_change_keycodes_cancel();
-  layers[target_layer] = true;
+// quantum_passthrough_release does not take extra arguments.
+enum squirrel_error quantum_passthrough_release(struct key *key, uint8_t layer,
+                                                uint8_t key_index,
+                                                int arg_count, void **args) {
+  if (arg_count != 0) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  if (layer == 0) {
+    return ERR_PASSTHROUGH_ON_BOTTOM_LAYER;
+  };
+  for (uint8_t i = layer - 1; i != 255; i--) {
+    if (!layers[i].active) {
+      continue;
+    }
+    struct key *selected_key = &(layers[i].keys[key_index]);
+    enum squirrel_error err = selected_key->released(
+        selected_key, i, key_index, selected_key->released_argument_count,
+        selected_key->released_arguments);
+    if (err != ERR_NONE) {
+      return err;
+    }
+    if (i != 16) {
+      continue;
+    }
+    struct key passthrough_key;
+    passthrough_key.pressed = quantum_passthrough_press;
+    passthrough_key.pressed_argument_count = 0;
+    passthrough_key.released = quantum_passthrough_release;
+    passthrough_key.released_argument_count = 0;
+    copy_key(&passthrough_key, &layers[16].keys[key_index]);
+  }
+  return ERR_NONE;
 }
 
-void momentary_falling(struct key *key, uint16_t target_layer, uint8_t layer) {
-  (void)key;
-  (void)layer;
-  layers[target_layer] = false;
+enum squirrel_error layer_momentary_press(struct key *key, uint8_t layer,
+                                          uint8_t key_index, int arg_count,
+                                          void **args) {
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  uint8_t target_layer = *(uint8_t *)args[0];
+  layers[target_layer].active = true;
+  return ERR_NONE;
 }
 
-void toggle(struct key *key, uint16_t target_layer, uint8_t layer) {
-  (void)key;
-  (void)layer;
-  layer_change_keycodes_cancel();
-  layers[target_layer] = !layers[target_layer];
+enum squirrel_error layer_momentary_release(struct key *key, uint8_t layer,
+                                            uint8_t key_index, int arg_count,
+                                            void **args) {
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  uint8_t target_layer = *(uint8_t *)args[0];
+  layers[target_layer].active = false;
+  return ERR_NONE;
 }
 
-void default_set(struct key *key, uint16_t target_layer, uint8_t layer) {
-  (void)key;
-  (void)layer;
-  layer_change_keycodes_cancel();
-  layers[layer] = false;
-  default_layer = target_layer;
-  layers[target_layer] = true;
+enum squirrel_error layer_toggle_press(struct key *key, uint8_t layer,
+                                       uint8_t key_index, int arg_count,
+                                       void **args) {
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  uint8_t target_layer = *(uint8_t *)args[0];
+  layers[target_layer].active = !layers[target_layer].active;
+  return ERR_NONE;
+}
+
+enum squirrel_error layer_toggle_release(struct key *key, uint8_t layer,
+                                         uint8_t key_index, int arg_count,
+                                         void **args) {
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  return ERR_NONE;
+}
+
+enum squirrel_error layer_solo_press(struct key *key, uint8_t layer,
+                                     uint8_t key_index, int arg_count,
+                                     void **args) {
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  uint8_t target_layer = *(uint8_t *)args[0];
+  for (uint8_t i = 0; i < 16; i++) {
+    layers[i].active = false;
+  }
+  layers[target_layer].active = true;
+  return ERR_NONE;
+}
+
+enum squirrel_error layer_solo_release(struct key *key, uint8_t layer,
+                                       uint8_t key_index, int arg_count,
+                                       void **args) {
+  if (arg_count != 1) {
+    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
+  };
+  return ERR_NONE;
 }
