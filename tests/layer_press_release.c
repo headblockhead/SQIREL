@@ -14,7 +14,7 @@
 // layer_solo_release
 // in squirrel_quantum.c
 int main() {
-  init_keyboard(1);
+  squirrel_init(1);
   enum squirrel_error err;
   struct key test_key;
 

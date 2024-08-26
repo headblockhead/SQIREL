@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-enum squirrel_error init_keyboard(int total_keys) {
+enum squirrel_error squirrel_init(int total_keys) {
   key_count = total_keys;
   struct key passthrough_key;
   passthrough_key.pressed = quantum_passthrough_press;
@@ -20,13 +20,19 @@ enum squirrel_error init_keyboard(int total_keys) {
     }
   }
   key_states = (bool *)malloc(total_keys * sizeof(bool));
+  layers[16].active = true;
   return ERR_NONE;
 };
 
-enum squirrel_error deinit_keyboard() {
+enum squirrel_error squirrel_deinit() {
   for (uint8_t j = 16; j != 255; j--) {
     free(layers[j].keys);
   }
   free(key_states);
+  // NULL the pointers to prevent use after free
+  for (uint8_t j = 16; j != 255; j--) {
+    layers[j].keys = NULL;
+  }
+  key_states = NULL;
   return ERR_NONE;
 };

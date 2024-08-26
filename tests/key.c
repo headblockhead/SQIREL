@@ -42,7 +42,7 @@ enum squirrel_error test_release(struct key *key, uint8_t layer,
 
 // test: press_key, release_key + check_key - in squirrel_key.c
 int main() {
-  init_keyboard(1);
+  squirrel_init(1);
 
   // press_key + release_key
   uint8_t code1 = 0x0F;
@@ -72,14 +72,28 @@ int main() {
   if (test_result != 0) {
     return 3;
   }
+  // keys are copied to layer 17 (index 16) when pressed, to avoid layer issues.
+  if (layers[16].keys[0].pressed_arguments[0] != &code1) {
+    return 4;
+  }
+  if (layers[16].keys[0].pressed_arguments[1] != &code2) {
+    return 5;
+  }
 
   test_result = 1;
   err = release_key(0);
   if (err != ERR_NONE) {
-    return 4;
+    return 6;
   }
   if (test_result != 0) {
-    return 5;
+    return 7;
+  }
+  // Keys are replaced with passthrough on layer 17 when released.
+  if (layers[16].keys[0].pressed_arguments != NULL) {
+    return 8;
+  }
+  if (layers[16].keys[0].released_arguments != NULL) {
+    return 9;
   }
 
   // check_key
@@ -87,52 +101,52 @@ int main() {
   key_states[0] = false;
   err = check_key(0, true); // should call press_key
   if (err != ERR_NONE) {
-    return 6;
+    return 10;
   }
   if (test_result != 0) {
-    return 7;
+    return 11;
   }
   if (key_states[0] != true) {
-    return 8;
+    return 12;
   }
 
   test_result = 1;
   key_states[0] = true;
   err = check_key(0, false); // should call release_key
   if (err != ERR_NONE) {
-    return 9;
+    return 13;
   }
   if (test_result != 0) {
-    return 10;
+    return 14;
   }
   if (key_states[0] != false) {
-    return 11;
+    return 15;
   }
 
   test_result = 1;
   key_states[0] = true;
   err = check_key(0, true); // should not call press_key
   if (err != ERR_NONE) {
-    return 12;
+    return 16;
   }
   if (test_result != 1) {
-    return 13;
+    return 17;
   }
   if (key_states[0] != true) {
-    return 14;
+    return 18;
   }
 
   test_result = 1;
   key_states[0] = false;
   err = check_key(0, false); // should not call release_key
   if (err != ERR_NONE) {
-    return 15;
+    return 19;
   }
   if (test_result != 1) {
-    return 16;
+    return 20;
   }
   if (key_states[0] != false) {
-    return 17;
+    return 21;
   }
 
   free(testkey.pressed_arguments);

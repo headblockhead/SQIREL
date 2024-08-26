@@ -2,8 +2,9 @@
 #include "squirrel.h"
 #include "squirrel_quantum.h"
 #include <stdint.h>
+#include <stdlib.h>
 
-int key_count = 0; // This should be overwritten by init_keyboard
+int key_count = 0; // This should be overwritten by squirrel_init
 
 void copy_key(struct key *source, struct key *destination) {
   *destination = *source;
@@ -47,9 +48,12 @@ enum squirrel_error release_key(uint8_t key_index) {
     struct key passthrough_key;
     passthrough_key.pressed = quantum_passthrough_press;
     passthrough_key.pressed_argument_count = 0;
+    passthrough_key.pressed_arguments = NULL;
     passthrough_key.released = quantum_passthrough_release;
     passthrough_key.released_argument_count = 0;
+    passthrough_key.released_arguments = NULL;
     copy_key(&passthrough_key, &layers[16].keys[key_index]);
+    layers[16].keys[0].pressed_argument_count = 0;
   }
   return ERR_NONE;
 }

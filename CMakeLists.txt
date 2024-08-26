@@ -18,6 +18,7 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Testing")
             include(CodeCoverage)
             APPEND_COVERAGE_COMPILER_FLAGS()
             setup_target_for_coverage_gcovr_html(squirrel squirrel_test coverage)
+            list(APPEND GCOVR_EXCLUDES "tests/")
         endif()
 
         add_executable(keyboard_press_release tests/keyboard_press_release.c)
