@@ -72,6 +72,7 @@ add_library(squirrel STATIC
         src/squirrel_key.c
         src/squirrel_consumer.c
         src/squirrel_init.c
+        src/squirrel_keymap.c
         )
 
 target_include_directories(squirrel PRIVATE include)
