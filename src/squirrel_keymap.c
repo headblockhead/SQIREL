@@ -2,6 +2,8 @@
 #include "squirrel_quantum.h"
 #include <stdlib.h>
 
+int key_index_from_xy(int x, int y, int width) { return y * width + x; }
+
 struct key nop(void) {
   return (struct key){
       .pressed = key_nop,
