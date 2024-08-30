@@ -2,7 +2,8 @@
 #define SQUIRREL_KEYMAP_H
 #include "squirrel_key.h"
 
-int key_index_from_xy(int x, int y, int width);
+void new_layer(int layer, struct key *keys, int key_count);
+
 struct key nop(void);
 struct key keyboard(uint8_t keycode);
 struct key keyboard_modifier(uint8_t modifier);

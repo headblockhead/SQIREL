@@ -2,7 +2,11 @@
 #include "squirrel_quantum.h"
 #include <stdlib.h>
 
-int key_index_from_xy(int x, int y, int width) { return y * width + x; }
+void new_layer(int layer, struct key *keys, int key_count) {
+  for (int i = 0; i < key_count; i++) {
+    layers[layer].keys[i] = keys[i];
+  }
+}
 
 struct key nop(void) {
   return (struct key){
