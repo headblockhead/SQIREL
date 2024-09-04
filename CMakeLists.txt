@@ -60,6 +60,10 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Testing")
         add_executable(keyboard_activate_deactivate_get_modifier tests/keyboard_activate_deactivate_get_modifier.c)
         target_link_libraries(keyboard_activate_deactivate_get_modifier squirrel)
         add_test(NAME keyboard_activate_deactivate_get_modifier COMMAND keyboard_activate_deactivate_get_modifier)
+
+        add_executable(multikey tests/multikey.c)
+        target_link_libraries(multikey squirrel)
+        add_test(NAME multikey COMMAND multikey)
 else()
        add_compile_options(-Os) # Enable size optimizations
 endif()
