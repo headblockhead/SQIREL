@@ -4,6 +4,7 @@
 #include "squirrel_key.h"
 #include "squirrel_keyboard.h"
 #include <stdint.h>
+#include <stdlib.h>
 
 struct layer layers[17];
 

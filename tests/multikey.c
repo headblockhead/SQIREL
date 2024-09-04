@@ -40,15 +40,11 @@ enum squirrel_error test_release(struct key *key, uint8_t layer,
   return ERR_NONE;
 }
 
-// test: press_key, release_key + check_key - in squirrel_key.c,
-// but with multiple keys in a keyboard.
-int main() {
-  squirrel_init(1);
+uint8_t code1 = 0x0F;
+uint8_t code2 = 0xF0;
 
+void make_testkey(int index) {
   // press_key + release_key
-  uint8_t code1 = 0x0F;
-  uint8_t code2 = 0xF0;
-
   struct key testkey;
   testkey.pressed = test_press;
   testkey.pressed_argument_count = 2;
@@ -62,11 +58,18 @@ int main() {
   testkey.released_arguments[0] = &code2;
   testkey.released_arguments[1] = &code1;
 
-  layers[0].keys[0] = testkey;
-  layers[0].keys[1] = testkey;
-  layers[0].keys[2] = testkey;
-  layers[0].keys[3] = testkey;
-  layers[0].keys[4] = testkey;
+  layers[0].keys[index] = testkey;
+};
+
+// test: press_key, release_key + check_key - in squirrel_key.c,
+// but with multiple keys in a keyboard.
+int main() {
+  squirrel_init(5);
+  make_testkey(0);
+  make_testkey(1);
+  make_testkey(2);
+  make_testkey(3);
+  make_testkey(4);
   layers[0].active = true;
 
   for (int i = 0; i < 5; i++) {
@@ -75,6 +78,7 @@ int main() {
     if (err != ERR_NONE) {
       return 2;
     }
+    return 0;
     if (test_result != 0) {
       return 3;
     }
@@ -157,8 +161,11 @@ int main() {
     }
   };
 
-  free(testkey.pressed_arguments);
-  free(testkey.released_arguments);
+  // cleanup
+  for (int i = 0; i < 5; i++) {
+    free(layers[0].keys[i].pressed_arguments);
+    free(layers[0].keys[i].released_arguments);
+  }
 
   return 0;
 }
