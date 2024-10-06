@@ -3,16 +3,20 @@
 #include "squirrel_key.h"
 #include "squirrel_quantum.h"
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 enum squirrel_error squirrel_init(int total_keys) {
   key_count = total_keys;
-  struct key *passthrough_key =
-      &(struct key){.pressed = quantum_passthrough_press,
-                    .released = quantum_passthrough_release};
-  for (uint8_t j = 16; j != 255; j--) {
-    for (uint8_t i = 0; i < total_keys; i++) {
+  struct key passthrough_key = (struct key){
+      .pressed = quantum_passthrough_press,
+      .released = quantum_passthrough_release,
+  };
+  for (int j = 16; j >= 0; j--) {
+    layers[j].active = false;
+    layers[j].keys = (struct key *)malloc(total_keys * sizeof(struct key));
+    for (int i = 0; i < total_keys; i++) {
       layers[j].keys[i] = passthrough_key;
     }
   }

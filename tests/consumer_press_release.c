@@ -3,74 +3,104 @@
 #include "squirrel_key.h"
 #include "squirrel_quantum.h"
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 // test: consumer_press + consumer_release - in squirrel_quantum.c
 int main() {
   struct key test_key; // values unused
   enum squirrel_error err;
-  void **args = malloc(sizeof(void *));
-  for (uint16_t test_consumer_code = 0; test_consumer_code <= 65534;
+  for (uint16_t test_consumer_code = 0; test_consumer_code != 0xFFFF;
        test_consumer_code++) {
-    args[0] = &test_consumer_code;
     // consumer_press
     // no code becomes a code
     consumer_code = 0;
-    err = consumer_press(&test_key, 0, 0, 1, args);
+    err = consumer_press(&test_key, 0, 0, &test_consumer_code);
     if (err != ERR_NONE) {
+      printf("err while testing with test_consumer_code %d,\n",
+             test_consumer_code);
+      printf("err from consumer_press in test 1: %d\n", err);
       return 1;
     }
     if (consumer_code != test_consumer_code) {
-      return 2;
+      printf("err while testing with test_consumer_code %d,\n",
+             test_consumer_code);
+      printf("consumer_code not equal to test_consumer_code in consumer_press "
+             "test 1: "
+             "%d\n",
+             consumer_code);
+      return 1;
     }
     // a code stays a code
-    err = consumer_press(&test_key, 0, 0, 1, args);
+    err = consumer_press(&test_key, 0, 0, &test_consumer_code);
     if (err != ERR_NONE) {
-      return 3;
+      printf("err while testing with test_consumer_code %d,\n",
+             test_consumer_code);
+      printf("err from consumer_press in test 2: %d\n", err);
+      return 1;
     }
     if (consumer_code != test_consumer_code) {
-      return 4;
+      printf("err while testing with test_consumer_code %d,\n",
+             test_consumer_code);
+      printf("consumer_code not equal to test_consumer_code in consumer_press "
+             "test 2: "
+             "%d\n",
+             consumer_code);
+      return 1;
     }
     // another code becomes a code
     consumer_code = 0xFFFF;
-    err = consumer_press(&test_key, 0, 0, 1, args);
+    err = consumer_press(&test_key, 0, 0, &test_consumer_code);
     if (err != ERR_NONE) {
-      return 5;
+      printf("err while testing with test_consumer_code %d,\n",
+             test_consumer_code);
+      printf("err from consumer_press in test 3: %d\n", err);
+      return 1;
     }
     if (consumer_code != test_consumer_code) {
-      return 6;
+      printf("err while testing with test_consumer_code %d,\n",
+             test_consumer_code);
+      printf("consumer_code not equal to test_consumer_code in consumer_press "
+             "test 3: "
+             "%d\n",
+             consumer_code);
+      return 1;
     }
 
     // consumer_release
     // a code becomes no code
     consumer_code = test_consumer_code;
-    err = consumer_release(&test_key, 0, 0, 1, args);
+    err = consumer_release(&test_key, 0, 0, &test_consumer_code);
     if (err != ERR_NONE) {
-      return 7;
+      printf("err while testing with test_consumer_code %d,\n",
+             test_consumer_code);
+      printf("err from consumer_release in test 1: %d\n", err);
+      return 1;
     }
     if (consumer_code != 0) {
-      return 8;
+      printf("err while testing with test_consumer_code %d,\n",
+             test_consumer_code);
+      printf("consumer_code not equal to 0 in consumer_release test 1: %d\n",
+             consumer_code);
+      return 1;
     }
     // another code stays another code
     consumer_code = 0xFFFF;
-    err = consumer_release(&test_key, 0, 0, 1, args);
+    err = consumer_release(&test_key, 0, 0, &test_consumer_code);
     if (err != ERR_NONE) {
-      return 9;
+      printf("err while testing with test_consumer_code %d,\n",
+             test_consumer_code);
+      printf("err from consumer_release in test 2: %d\n", err);
+      return 1;
     }
     if (consumer_code != 0xFFFF) {
-      return 10;
+      printf("err while testing with test_consumer_code %d,\n",
+             test_consumer_code);
+      printf("consumer_code not equal to 0xFFFF in consumer_release test 2: "
+             "%d\n",
+             consumer_code);
+      return 1;
     }
   }
-
-  // Test expected errors
-  err = consumer_press(&test_key, 0, 0, 0, 0);
-  if (err != ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT) {
-    return 11;
-  }
-  err = consumer_release(&test_key, 0, 0, 0, 0);
-  if (err != ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT) {
-    return 12;
-  }
-
   return 0;
 };

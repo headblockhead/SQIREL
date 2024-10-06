@@ -47,7 +47,7 @@ Tests the library
 ```bash
 cmake -DCMAKE_BUILD_TYPE=Testing ..
 make -j4
-ctest -T Test -T Coverage .
+ctest -T Test -T Coverage --output-on-failure .
 ```
 
 ### Clean
@@ -56,15 +56,4 @@ Cleans the build directory for a fresh build.
 ```bash
 rm -rf ./build
 mkdir build
-```
-
-### Test
-Directory: ./build
-
-Runs the unit tests.
-
-```bash
-cmake -S. -DBUILD_TESTING=true ..
-cmake --build .
-ctest
 ```

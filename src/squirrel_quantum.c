@@ -4,9 +4,10 @@
 #include "squirrel_key.h"
 #include "squirrel_keyboard.h"
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 
-struct layer layers[17];
+struct layer layers[17] = {};
 
 enum squirrel_error key_nop(struct key *key, uint8_t layer, uint8_t key_index,
                             void *arg) {
@@ -69,20 +70,20 @@ enum squirrel_error quantum_passthrough_press(struct key *key, uint8_t layer,
   if (layer == 0) {
     return ERR_PASSTHROUGH_ON_BOTTOM_LAYER;
   };
-  for (uint8_t i = layer - 1; i != 255; i--) {
+  for (int i = layer - 1; i >= 0; i--) {
     if (!layers[i].active) {
       continue;
     }
-    struct key *selected_key = layers[i].keys[key_index];
-    enum squirrel_error err = selected_key->pressed(
-        selected_key, i, key_index, selected_key->pressed_argument);
+    struct key selected_key = layers[i].keys[key_index];
+    enum squirrel_error err = selected_key.pressed(
+        &selected_key, i, key_index, selected_key.pressed_argument);
     if (err != ERR_NONE) {
       return err;
     }
     if (i == 16) {
       continue;
     }
-    copy_key(selected_key, layers[16].keys[key_index]);
+    copy_key(&selected_key, &layers[16].keys[key_index]);
   }
   return ERR_NONE;
 }
@@ -93,13 +94,13 @@ enum squirrel_error quantum_passthrough_release(struct key *key, uint8_t layer,
   if (layer == 0) {
     return ERR_PASSTHROUGH_ON_BOTTOM_LAYER;
   };
-  for (uint8_t i = layer - 1; i != 255; i--) {
+  for (int i = layer - 1; i >= 0; i--) {
     if (!layers[i].active) {
       continue;
     }
-    struct key *selected_key = layers[i].keys[key_index];
-    enum squirrel_error err = selected_key->released(
-        selected_key, i, key_index, selected_key->released_argument);
+    struct key selected_key = layers[i].keys[key_index];
+    enum squirrel_error err = selected_key.released(
+        &selected_key, i, key_index, selected_key.released_argument);
     if (err != ERR_NONE) {
       return err;
     }
@@ -109,7 +110,7 @@ enum squirrel_error quantum_passthrough_release(struct key *key, uint8_t layer,
     struct key passthrough_key;
     passthrough_key.pressed = quantum_passthrough_press;
     passthrough_key.released = quantum_passthrough_release;
-    copy_key(&passthrough_key, layers[16].keys[key_index]);
+    copy_key(&passthrough_key, &layers[16].keys[key_index]);
   }
   return ERR_NONE;
 }
