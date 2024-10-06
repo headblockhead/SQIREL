@@ -6,10 +6,10 @@
 struct key {
   enum squirrel_error (*pressed)(struct key *, uint8_t layer, uint8_t key_index,
                                  void *arg); // called when the key is pressed
-  void *pressed_argument;                    // argument to pass to pressed
   enum squirrel_error (*released)(struct key *, uint8_t layer,
                                   uint8_t key_index,
                                   void *arg); // called when the key is released
+  void *pressed_argument;                     // argument to pass to pressed
   void *released_argument;                    // argument to pass to released
   int debug;
 };
