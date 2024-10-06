@@ -5,15 +5,12 @@
 
 struct key {
   enum squirrel_error (*pressed)(struct key *, uint8_t layer, uint8_t key_index,
-                                 int arg_count,
-                                 void **args); // called when the key is pressed
-  void **pressed_arguments;                    // arguments to pass to pressed
-  int pressed_argument_count; // the amount of arguments in pressed_arguments
-  enum squirrel_error (*released)(
-      struct key *, uint8_t layer, uint8_t key_index, int arg_count,
-      void **args);            // called when the key is released
-  void **released_arguments;   // arguments to pass to released
-  int released_argument_count; // the amount of arguments in released_arguments
+                                 void *arg); // called when the key is pressed
+  void *pressed_argument;                    // argument to pass to pressed
+  enum squirrel_error (*released)(struct key *, uint8_t layer,
+                                  uint8_t key_index,
+                                  void *arg); // called when the key is released
+  void *released_argument;                    // argument to pass to released
 };
 
 extern int key_count; // number of keys on the keyboard

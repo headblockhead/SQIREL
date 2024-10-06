@@ -61,7 +61,7 @@ int main() {
   testkey.released_arguments[0] = &code2;
   testkey.released_arguments[1] = &code1;
 
-  layers[0].keys[0] = testkey;
+  layers[0].keys[0] = &testkey;
   layers[0].active = true;
 
   // check that arguments are correct, and in the correct order.
@@ -73,10 +73,10 @@ int main() {
     return 3;
   }
   // keys are copied to layer 17 (index 16) when pressed, to avoid layer issues.
-  if (layers[16].keys[0].pressed_arguments[0] != &code1) {
+  if (layers[16].keys[0]->pressed_arguments[0] != &code1) {
     return 4;
   }
-  if (layers[16].keys[0].pressed_arguments[1] != &code2) {
+  if (layers[16].keys[0]->pressed_arguments[1] != &code2) {
     return 5;
   }
 
@@ -89,10 +89,10 @@ int main() {
     return 7;
   }
   // Keys are replaced with passthrough on layer 17 when released.
-  if (layers[16].keys[0].pressed_arguments != NULL) {
+  if (layers[16].keys[0]->pressed_arguments != NULL) {
     return 8;
   }
-  if (layers[16].keys[0].released_arguments != NULL) {
+  if (layers[16].keys[0]->released_arguments != NULL) {
     return 9;
   }
 

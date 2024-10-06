@@ -44,14 +44,14 @@ int main() {
   testkey.pressed_argument_count = 0;
   testkey.released = test_release;
   testkey.released_argument_count = 0;
-  layers[0].keys[0] = testkey; // When testkey is pressed, the test is passing.
+  layers[0].keys[0] = &testkey; // When testkey is pressed, the test is passing.
 
   struct key passthroughkey;
   passthroughkey.pressed = quantum_passthrough_press;
   passthroughkey.pressed_argument_count = 0;
   passthroughkey.released = quantum_passthrough_release;
   passthroughkey.released_argument_count = 0;
-  layers[1].keys[0] = passthroughkey; // This is the key being tested.
+  layers[1].keys[0] = &passthroughkey; // This is the key being tested.
 
   layers[0].active = true;
   layers[1].active = true;
@@ -80,15 +80,15 @@ int main() {
       false; // this layer contains the badtestkey and should be ignored.
   layers[2].active = true; // this layer contains the passthrough key.
 
-  layers[2].keys[0] = passthroughkey;
+  layers[2].keys[0] = &passthroughkey;
 
   struct key badtestkey;
   badtestkey.pressed = bad_test_press;
   badtestkey.pressed_argument_count = 0;
   badtestkey.released = bad_test_release;
   badtestkey.released_argument_count = 0;
-  layers[1].keys[0] = badtestkey; // When badtestkey is pressed, the test is
-                                  // failing.
+  layers[1].keys[0] = &badtestkey; // When badtestkey is pressed, the test is
+                                   // failing.
 
   test_result = 1;       // Reset the test result to failing again.
   err = press_key(0);    // Press the key.

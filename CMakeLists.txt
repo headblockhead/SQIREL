@@ -8,6 +8,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
         add_compile_options(-Og) # Enable debug optimizations
 elseif(CMAKE_BUILD_TYPE STREQUAL "Testing")
         message(STATUS "Testing enabled")
+        add_compile_options(-O3) # Don't include test code in coverage percent.
         include(CTest)
         enable_testing()
 
