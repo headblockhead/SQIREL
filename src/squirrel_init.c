@@ -15,8 +15,7 @@ enum squirrel_error squirrel_init(int total_keys) {
   };
   for (int j = 16; j >= 0; j--) {
     layers[j].active = false;
-    layers[j].keys = (struct key *)malloc(total_keys * sizeof(struct key) +
-                                          2 * sizeof(void *));
+    layers[j].keys = (struct key *)malloc(total_keys * sizeof(struct key));
     for (int i = 0; i < total_keys; i++) {
       layers[j].keys[i] = passthrough_key;
     }
