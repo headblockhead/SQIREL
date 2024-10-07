@@ -12,7 +12,7 @@ int main() {
     // keyboard_press
     // Off becomes on
     keyboard_keycodes[keycode] = false;
-    err = keyboard_press(&test_key, 0, 0, &keycode);
+    err = keyboard_press(0, 0, &keycode);
     if (err != ERR_NONE) {
       return 1;
     }
@@ -20,7 +20,7 @@ int main() {
       return 2;
     }
     // On stays on
-    err = keyboard_press(&test_key, 0, 0, &keycode);
+    err = keyboard_press(0, 0, &keycode);
     if (err != ERR_NONE) {
       return 3;
     }
@@ -31,7 +31,7 @@ int main() {
     // keyboard_release
     // On becomes off
     keyboard_keycodes[keycode] = true;
-    err = keyboard_release(&test_key, 0, 0, &keycode);
+    err = keyboard_release(0, 0, &keycode);
     if (err != ERR_NONE) {
       return 5;
     }
@@ -39,7 +39,7 @@ int main() {
       return 6;
     }
     // Off stays off
-    err = keyboard_release(&test_key, 0, 0, &keycode);
+    err = keyboard_release(0, 0, &keycode);
     if (err != ERR_NONE) {
       return 7;
     }

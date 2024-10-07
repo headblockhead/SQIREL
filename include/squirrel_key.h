@@ -3,18 +3,18 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-struct key {
-  enum squirrel_error (*pressed)(struct key *, uint8_t layer, uint8_t key_index,
-                                 void *arg); // called when the key is pressed
-  void *pressed_argument;                    // argument to pass to pressed
-  enum squirrel_error (*released)(struct key *, uint8_t layer,
-                                  uint8_t key_index,
-                                  void *arg); // called when the key is released
-  void *released_argument;                    // argument to pass to released
-  int debug;
-};
+#ifndef SQUIRREL_KEYCOUNT
+#define SQUIRREL_KEYCOUNT 1
+#endif
 
-extern int key_count; // number of keys on the keyboard
+typedef enum squirrel_error (*keyfunc)(uint8_t, uint8_t, void *);
+
+struct key {
+  keyfunc pressed;         // called when the key is pressed
+  keyfunc released;        // called when the key is released
+  void *pressed_argument;  // argument to pass to pressed
+  void *released_argument; // argument to pass to released
+};
 
 void copy_key(
     struct key *source,
@@ -27,7 +27,7 @@ release_key(uint8_t key_index); // Release the key at the index in the
 
 // key_states is an array of booleans that represent the state of each key. Used
 // by check_key to determine if a key is pressed or released.
-extern bool *key_states;
+extern bool key_states[SQUIRREL_KEYCOUNT];
 
 // check_key compares the state of the key at the index to the key_states array
 // to determine if the key is pressed or released, and calls the appropriate

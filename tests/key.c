@@ -7,8 +7,7 @@
 
 uint8_t test_result = 1;
 
-enum squirrel_error test_press(struct key *key, uint8_t layer,
-                               uint8_t key_index, void *arg) {
+enum squirrel_error test_press(uint8_t layer, uint8_t key_index, void *arg) {
   (void)layer;
   (void)key_index;
   uint8_t code = *(uint8_t *)arg;
@@ -18,8 +17,7 @@ enum squirrel_error test_press(struct key *key, uint8_t layer,
   return ERR_NONE;
 }
 
-enum squirrel_error test_release(struct key *key, uint8_t layer,
-                                 uint8_t key_index, void *arg) {
+enum squirrel_error test_release(uint8_t layer, uint8_t key_index, void *arg) {
   (void)layer;
   (void)key_index;
   uint8_t code = *(uint8_t *)arg;
@@ -30,8 +28,10 @@ enum squirrel_error test_release(struct key *key, uint8_t layer,
 }
 
 // test: press_key, release_key + check_key - in squirrel_key.c
+#define SQUIRREL_KEYCOUNT 1
+
 int main() {
-  squirrel_init(1);
+  squirrel_init();
 
   // press_key + release_key
   uint8_t code = 0xF0;

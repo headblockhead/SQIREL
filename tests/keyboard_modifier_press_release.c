@@ -13,8 +13,7 @@ int main() {
   // no modifiers adding no modifiers is no modifiers
   uint8_t current_modifier = 0b00000000;
   keyboard_modifiers = 0;
-  enum squirrel_error err =
-      keyboard_modifier_press(&test_key, 0, 0, &current_modifier);
+  enum squirrel_error err = keyboard_modifier_press(0, 0, &current_modifier);
   if (err != ERR_NONE) {
     return 255;
   }
@@ -26,8 +25,7 @@ int main() {
   current_modifier = 0b00000001;
   for (uint8_t i = 0; i < 8; i++) {
     keyboard_modifiers = 0;
-    enum squirrel_error err =
-        keyboard_modifier_press(&test_key, 0, 0, &current_modifier);
+    enum squirrel_error err = keyboard_modifier_press(0, 0, &current_modifier);
     if (err != ERR_NONE) {
       return 255;
     }
@@ -42,8 +40,7 @@ int main() {
   for (uint8_t i = 0; i < 8; i++) {
     // modifiers stack, ORd to become the same number
     uint8_t old_modifiers = keyboard_modifiers;
-    enum squirrel_error err =
-        keyboard_modifier_press(&test_key, 0, 0, &current_modifier);
+    enum squirrel_error err = keyboard_modifier_press(0, 0, &current_modifier);
     if (err != ERR_NONE) {
       return 255;
     }
@@ -58,7 +55,7 @@ int main() {
   // no modifiers removing no modifiers is no modifiers
   current_modifier = 0b00000000;
   keyboard_modifiers = 0;
-  err = keyboard_modifier_release(&test_key, 0, 0, &current_modifier);
+  err = keyboard_modifier_release(0, 0, &current_modifier);
   if (err != ERR_NONE) {
     return 255;
   }
@@ -71,7 +68,7 @@ int main() {
   for (uint8_t i = 0; i < 8; i++) {
     keyboard_modifiers = current_modifier;
     enum squirrel_error err =
-        keyboard_modifier_release(&test_key, 0, 0, &current_modifier);
+        keyboard_modifier_release(0, 0, &current_modifier);
     if (err != ERR_NONE) {
       return 255;
     }
@@ -88,7 +85,7 @@ int main() {
     // modifiers stack, ORd to become the same number
     uint8_t old_modifiers = keyboard_modifiers;
     enum squirrel_error err =
-        keyboard_modifier_release(&test_key, 0, 0, &current_modifier);
+        keyboard_modifier_release(0, 0, &current_modifier);
     if (err != ERR_NONE) {
       return 255;
     }

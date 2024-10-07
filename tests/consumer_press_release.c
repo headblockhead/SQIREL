@@ -15,7 +15,7 @@ int main() {
     // consumer_press
     // no code becomes a code
     consumer_code = 0;
-    err = consumer_press(&test_key, 0, 0, &test_consumer_code);
+    err = consumer_press(0, 0, &test_consumer_code);
     if (err != ERR_NONE) {
       printf("err while testing with test_consumer_code %d,\n",
              test_consumer_code);
@@ -32,7 +32,7 @@ int main() {
       return 1;
     }
     // a code stays a code
-    err = consumer_press(&test_key, 0, 0, &test_consumer_code);
+    err = consumer_press(0, 0, &test_consumer_code);
     if (err != ERR_NONE) {
       printf("err while testing with test_consumer_code %d,\n",
              test_consumer_code);
@@ -50,7 +50,7 @@ int main() {
     }
     // another code becomes a code
     consumer_code = 0xFFFF;
-    err = consumer_press(&test_key, 0, 0, &test_consumer_code);
+    err = consumer_press(0, 0, &test_consumer_code);
     if (err != ERR_NONE) {
       printf("err while testing with test_consumer_code %d,\n",
              test_consumer_code);
@@ -70,7 +70,7 @@ int main() {
     // consumer_release
     // a code becomes no code
     consumer_code = test_consumer_code;
-    err = consumer_release(&test_key, 0, 0, &test_consumer_code);
+    err = consumer_release(0, 0, &test_consumer_code);
     if (err != ERR_NONE) {
       printf("err while testing with test_consumer_code %d,\n",
              test_consumer_code);
@@ -86,7 +86,7 @@ int main() {
     }
     // another code stays another code
     consumer_code = 0xFFFF;
-    err = consumer_release(&test_key, 0, 0, &test_consumer_code);
+    err = consumer_release(0, 0, &test_consumer_code);
     if (err != ERR_NONE) {
       printf("err while testing with test_consumer_code %d,\n",
              test_consumer_code);

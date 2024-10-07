@@ -5,7 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int key_count = 0; // This should be overwritten by squirrel_init
+#ifndef SQUIRREL_KEYCOUNT
+#define SQUIRREL_KEYCOUNT 1
+#endif
 
 void copy_key(struct key *source, struct key *destination) {
   *destination = *source;
@@ -17,8 +19,8 @@ enum squirrel_error press_key(uint8_t key_index) {
       continue;
     }
     struct key selected_key = layers[i].keys[key_index];
-    enum squirrel_error err = selected_key.pressed(
-        &selected_key, i, key_index, selected_key.pressed_argument);
+    enum squirrel_error err =
+        selected_key.pressed(i, key_index, selected_key.pressed_argument);
     if (err != ERR_NONE) {
       return err;
     }
@@ -36,8 +38,8 @@ enum squirrel_error release_key(uint8_t key_index) {
       continue;
     }
     struct key selected_key = layers[i].keys[key_index];
-    enum squirrel_error err = selected_key.released(
-        &selected_key, i, key_index, selected_key.released_argument);
+    enum squirrel_error err =
+        selected_key.released(i, key_index, selected_key.released_argument);
     if (err != ERR_NONE) {
       return err;
     }
@@ -52,7 +54,7 @@ enum squirrel_error release_key(uint8_t key_index) {
   return ERR_NONE;
 }
 
-bool *key_states;
+bool key_states[SQUIRREL_KEYCOUNT];
 
 enum squirrel_error check_key(uint8_t key_index, bool is_pressed) {
   enum squirrel_error err;

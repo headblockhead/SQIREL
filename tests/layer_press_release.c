@@ -13,15 +13,16 @@
 // layer_solo_press
 // layer_solo_release
 // in squirrel_quantum.c
+#define SQUIRREL_KEYCOUNT 1
 int main() {
-  squirrel_init(1);
+  squirrel_init();
   enum squirrel_error err;
   struct key test_key;
 
   uint8_t target_layer = 1;
 
   // layer_momentary
-  layer_momentary_press(&test_key, 0, 0, &target_layer);
+  layer_momentary_press(0, 0, &target_layer);
   for (uint8_t i = 0; i < 16; i++) {
     if (layers[i].active &&
         i != target_layer) { // if any other layers are active, fail.
@@ -37,7 +38,7 @@ int main() {
   for (uint8_t i = 0; i < 16; i++) { // activate all layers
     layers[i].active = true;
   }
-  layer_momentary_release(&test_key, 0, 0,
+  layer_momentary_release(0, 0,
                           &target_layer); // should deactivate target_layer only
   for (uint8_t i = 0; i < 16; i++) {
     if (!layers[i].active &&
@@ -53,7 +54,7 @@ int main() {
   }
 
   // layer_toggle
-  layer_toggle_press(&test_key, 0, 0,
+  layer_toggle_press(0, 0,
                      &target_layer); // should activate target_layer
   for (uint8_t i = 0; i < 16; i++) {
     if (layers[i].active &&
@@ -64,7 +65,7 @@ int main() {
   if (!layers[target_layer].active) { // if target_layer is not active, fail.
     return 12;
   }
-  layer_toggle_release(&test_key, 0, 0, &target_layer); // should not deactivate
+  layer_toggle_release(0, 0, &target_layer); // should not deactivate
   for (uint8_t i = 0; i < 16; i++) {
     if (layers[i].active &&
         i != target_layer) { // if any other layers are active, fail.
@@ -74,7 +75,7 @@ int main() {
   if (!layers[target_layer].active) { // if target_layer is not active, fail.
     return 14;
   }
-  layer_toggle_press(&test_key, 0, 0,
+  layer_toggle_press(0, 0,
                      &target_layer); // should deactivate target_layer
   for (uint8_t i = 0; i < 16; i++) { // if any other layers are active, fail.
     if (layers[i].active && i != target_layer) {
@@ -90,7 +91,7 @@ int main() {
     layers[i].active = true;
   }
   layer_solo_press(
-      &test_key, 0, 0,
+      0, 0,
       &target_layer); // solo should turn off all layers except target_layer
   for (uint8_t i = 0; i < 16; i++) {
     if (layers[i].active &&
@@ -102,7 +103,7 @@ int main() {
     return 18;
   }
   layer_solo_press(
-      &test_key, 0, 0,
+      0, 0,
       &target_layer); // solo should not turn off target_layer if called again
   for (uint8_t i = 0; i < 16; i++) {
     if (layers[i].active &&
@@ -113,7 +114,7 @@ int main() {
   if (!layers[target_layer].active) { // if target_layer is not active, fail.
     return 20;
   }
-  layer_solo_release(&test_key, 0, 0,
+  layer_solo_release(0, 0,
                      &target_layer); // release should not do anything
   for (uint8_t i = 0; i < 16; i++) {
     if (layers[i].active &&
