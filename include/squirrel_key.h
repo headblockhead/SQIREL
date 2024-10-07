@@ -11,7 +11,6 @@ struct key {
                                   uint8_t key_index,
                                   void *arg); // called when the key is released
   void *released_argument;                    // argument to pass to released
-  int debug;
 };
 
 extern int key_count; // number of keys on the keyboard
