@@ -79,9 +79,10 @@ enum squirrel_error quantum_passthrough_press(uint8_t layer, uint8_t key_index,
       return err;
     }
     if (i == 16) {
-      continue;
+      break;
     }
     copy_key(&selected_key, &layers[16].keys[key_index]);
+    break;
   }
   return ERR_NONE;
 }
@@ -103,12 +104,13 @@ enum squirrel_error quantum_passthrough_release(uint8_t layer,
       return err;
     }
     if (i != 16) {
-      continue;
+      break;
     }
     struct key passthrough_key;
     passthrough_key.pressed = quantum_passthrough_press;
     passthrough_key.released = quantum_passthrough_release;
     copy_key(&passthrough_key, &layers[16].keys[key_index]);
+    break;
   }
   return ERR_NONE;
 }

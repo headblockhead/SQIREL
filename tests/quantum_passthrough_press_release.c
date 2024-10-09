@@ -7,26 +7,24 @@
 uint8_t test_result = 1; // 0 = pass, 1 = fail
 bool bad_test = false;   // true = fail
 
-enum squirrel_error test_press(struct key *key, uint8_t layer,
-                               uint8_t key_index, void *arg) {
+enum squirrel_error test_press(uint8_t layer, uint8_t key_index, void *arg) {
   test_result = 0;
   return ERR_NONE;
 }
 
-enum squirrel_error test_release(struct key *key, uint8_t layer,
-                                 uint8_t key_index, void *arg) {
+enum squirrel_error test_release(uint8_t layer, uint8_t key_index, void *arg) {
   test_result = 0;
   return ERR_NONE;
 }
 
-enum squirrel_error bad_test_press(struct key *key, uint8_t layer,
-                                   uint8_t key_index, void *arg) {
+enum squirrel_error bad_test_press(uint8_t layer, uint8_t key_index,
+                                   void *arg) {
   bad_test = true;
   return ERR_NONE;
 }
 
-enum squirrel_error bad_test_release(struct key *key, uint8_t layer,
-                                     uint8_t key_index, void *arg) {
+enum squirrel_error bad_test_release(uint8_t layer, uint8_t key_index,
+                                     void *arg) {
   bad_test = true;
   return ERR_NONE;
 }

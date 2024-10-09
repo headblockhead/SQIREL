@@ -5,10 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef SQUIRREL_KEYCOUNT
-#define SQUIRREL_KEYCOUNT 1
-#endif
-
 void copy_key(struct key *source, struct key *destination) {
   *destination = *source;
 }
@@ -25,9 +21,10 @@ enum squirrel_error press_key(uint8_t key_index) {
       return err;
     }
     if (i == 16) {
-      continue;
+      break;
     }
     copy_key(&selected_key, &layers[16].keys[key_index]);
+    break;
   }
   return ERR_NONE;
 }
@@ -44,12 +41,13 @@ enum squirrel_error release_key(uint8_t key_index) {
       return err;
     }
     if (i != 16) {
-      continue;
+      break;
     }
     struct key passthrough_key;
     passthrough_key.pressed = quantum_passthrough_press;
     passthrough_key.released = quantum_passthrough_release;
     copy_key(&passthrough_key, &layers[16].keys[key_index]);
+    break;
   }
   return ERR_NONE;
 }
@@ -57,7 +55,6 @@ enum squirrel_error release_key(uint8_t key_index) {
 bool key_states[SQUIRREL_KEYCOUNT];
 
 enum squirrel_error check_key(uint8_t key_index, bool is_pressed) {
-  enum squirrel_error err;
   if (key_states[key_index] == is_pressed) {
     return ERR_NONE;
   }
@@ -67,5 +64,4 @@ enum squirrel_error check_key(uint8_t key_index, bool is_pressed) {
   }
   key_states[key_index] = false;
   return release_key(key_index);
-  return ERR_NONE;
 }

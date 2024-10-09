@@ -7,10 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef SQUIRREL_KEYCOUNT
-#define SQUIRREL_KEYCOUNT 1
-#endif
-
 enum squirrel_error squirrel_init(void) {
   struct key passthrough_key = (struct key){
       .pressed = quantum_passthrough_press,
@@ -19,7 +15,7 @@ enum squirrel_error squirrel_init(void) {
   for (int j = 16; j >= 0; j--) {
     layers[j].active = false;
     for (int i = 0; i < SQUIRREL_KEYCOUNT; i++) {
-      layers[j].keys[i] = passthrough_key;
+      copy_key(&passthrough_key, &layers[j].keys[i]);
     }
   }
   layers[16].active = true;

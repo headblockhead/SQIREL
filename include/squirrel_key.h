@@ -3,17 +3,25 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#ifndef SQUIRREL_KEYCOUNT
-#define SQUIRREL_KEYCOUNT 1
-#endif
+enum squirrel_keytype {
+  KEYTYPE_NOP,
+  KEYTYPE_KEYBOARD,
+  KEYTYPE_KEYBOARD_MODIFIER,
+  KEYTYPE_CONSUMER,
+  KEYTYPE_QUANTUM_PASSTHROUGH,
+  KEYTYPE_MOMENTARY,
+  KEYTYPE_TOGGLE,
+  KEYTYPE_SOLO,
+};
 
 typedef enum squirrel_error (*keyfunc)(uint8_t, uint8_t, void *);
 
 struct key {
-  keyfunc pressed;         // called when the key is pressed
-  keyfunc released;        // called when the key is released
-  void *pressed_argument;  // argument to pass to pressed
-  void *released_argument; // argument to pass to released
+  keyfunc pressed;            // called when the key is pressed
+  keyfunc released;           // called when the key is released
+  void *pressed_argument;     // argument to pass to pressed
+  void *released_argument;    // argument to pass to released
+  enum squirrel_keytype type; // the type of key
 };
 
 void copy_key(

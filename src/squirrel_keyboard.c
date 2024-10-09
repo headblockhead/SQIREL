@@ -11,7 +11,7 @@ void keyboard_activate_keycode(uint8_t keycode) {
 void keyboard_deactivate_keycode(uint8_t keycode) {
   keyboard_keycodes[keycode] = false;
 }
-void keyboard_get_keycodes(uint8_t (*active_keycodes)[6]) {
+bool keyboard_get_keycodes(uint8_t (*active_keycodes)[6]) {
   uint8_t active_keycodes_index = 0;
   for (int i = 0; (i <= 0xFF) && active_keycodes_index < 6; i++) {
     if (!keyboard_keycodes[i]) {
@@ -20,6 +20,10 @@ void keyboard_get_keycodes(uint8_t (*active_keycodes)[6]) {
     (*active_keycodes)[active_keycodes_index] = i;
     active_keycodes_index++;
   }
+  if (active_keycodes_index == 0) {
+    return false;
+  }
+  return true;
 }
 
 void keyboard_activate_modifier(uint8_t modifier) {

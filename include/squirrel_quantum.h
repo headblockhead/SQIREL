@@ -7,10 +7,6 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-#ifndef SQUIRREL_KEYCOUNT
-#define SQUIRREL_KEYCOUNT 1
-#endif
-
 struct layer {
   bool active; // true if this layer is currently active
   struct key keys[SQUIRREL_KEYCOUNT];
