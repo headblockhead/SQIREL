@@ -52,7 +52,7 @@ jobs:
         id: bump
         run: |
           BUMP_INPUT=${{ github.event.inputs.bump }}
-          echo "::set-output bump=value::${BUMP_INPUT:-"patch"}"
+          echo "bump=${BUMP_INPUT:-"patch"}" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         with:
           fetch-depth: '0'
