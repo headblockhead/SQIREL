@@ -51,8 +51,8 @@ jobs:
       - name: Set bump amount
         id: bump
         run: |
-        BUMP_INPUT=${{ github.event.inputs.bump }}
-        echo "::set-output bump=value::${BUMP_INPUT:-"patch"}"
+          BUMP_INPUT=${{ github.event.inputs.bump }}
+          echo "::set-output bump=value::${BUMP_INPUT:-"patch"}"
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         with:
           fetch-depth: '0'
