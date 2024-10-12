@@ -50,3 +50,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
       - run: gh release create ${{steps.tag.outputs.new_tag}} -d --generate-notes libsquirrel.a
+        env:
+          GH_TOKEN: ${{ github.token }}
