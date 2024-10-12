@@ -1,7 +1,5 @@
-name: Build, Test, and Release
+name: Draft release
 on: 
-  push:
-  pull_request:
   workflow_dispatch:
     inputs:
       bump:
@@ -40,7 +38,6 @@ jobs:
     - uses: DeterminateSystems/magic-nix-cache-action@a76a83091cd8728db8c37312dbdd0eeb1177a6c0
     - run: nix flake check
   release:
-
     concurrency:
       group: release
     runs-on: ubuntu-latest
@@ -49,11 +46,6 @@ jobs:
     env:
       VERSION: ${{github.event.after}}
     steps:
-      - name: Set bump amount
-        id: bump
-        run: |
-        BUMP_INPUT=${{ github.event.inputs.bump }}
-        echo "::set-output bump=value::${BUMP_INPUT:-"patch"}"
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         with:
           fetch-depth: '0'
@@ -64,7 +56,7 @@ jobs:
         id: tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BUMP: ${{ steps.bump.outputs.bump }}
+          DEFAULT_BUMP: ${{ github.event.inputs.bump }}
           WITH_V: true
       - run: gh release create ${{steps.tag.outputs.new_tag}} --generate-notes libsquirrel.a
         env:
