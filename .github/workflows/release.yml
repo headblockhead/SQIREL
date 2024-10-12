@@ -1,4 +1,4 @@
-name: Draft release
+name: Create release
 on: 
   push:
     branches:
