@@ -1,8 +1,7 @@
 name: Build, Test, and Release
 on: 
   push:
-    branches:
-      - main
+  pull_request:
 
 permissions:
   contents: write
@@ -31,40 +30,23 @@ jobs:
     - uses: DeterminateSystems/magic-nix-cache-action@a76a83091cd8728db8c37312dbdd0eeb1177a6c0
     - run: nix flake check
   release:
+    concurrency:
+      group: release
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
     needs: [build, test]
+    env:
+      VERSION: ${{github.event.after}}
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        with:
+          fetch-depth: '0'
       - uses: actions/download-artifact@d0ce8fd1167ed839810201de977912a090ab10a7
         with:
           name: libsquirrel.a
-      - name: Create Branch
-        run: |
-          git checkout -b ${{ env.PR_BRANCH }}
-      - name: Create Changelog
-        uses: TriPSs/conventional-changelog-action@492ffbe47a9dc2606e0fd58005d2579aff331dd7
-        id: changelog
-        with:
-          github-token: ${{ github.token }}
-          git-user-name: "github-actions[bot]"
-          git-user-email: "github-actions[bot]@users.noreply.github.com"
-          git-branch: ${{ env.PR_BRANCH }}
-          skip-git-pull: true
-          output-file: false
-          version-file: .github/package.yaml
-          create-summary: true
-      - uses: softprops/action-gh-release@0a7d9cdbe44d16ac5fe9788836ca8af96266902e
-        with:
-          token: ${{ secrets.GH_OWNER_TOKEN }}
-          tag_name: ${{ needs.changelog.outputs.tag }}
-          prerelease: false
-          draft: false
-          files: build/libsquirrel.a
-          generate_release_notes: true
-          name: ${{ needs.changelog.outputs.tag }}
-          body: |
-            <details>
-            <summary>Changelog</summary>
-  
-            ${{ clean_changelog }}
-            </details>
+      - uses: anothrNick/github-tag-action@1.36.0
+        id: tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+      - run: gh release create ${{steps.tag.outputs.new_tag}} -d --generate-notes libsquirrel.a
