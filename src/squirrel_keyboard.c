@@ -20,7 +20,7 @@ bool keyboard_get_keycodes(uint8_t (*active_keycodes)[6]) {
     (*active_keycodes)[active_keycodes_index] = i;
     active_keycodes_index++;
   }
-  return active_keycodes_index > 0;
+  return active_keycodes_index != 0;
 }
 
 void keyboard_activate_modifier(uint8_t modifier) {

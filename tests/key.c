@@ -7,61 +7,41 @@
 
 uint8_t test_result = 1;
 
-enum squirrel_error test_press(struct key *key, uint8_t layer,
-                               uint8_t key_index, int arg_count, void **args) {
+enum squirrel_error test_press(uint8_t layer, uint8_t key_index, void *arg) {
   (void)layer;
   (void)key_index;
-
-  if (arg_count != 2) {
-    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
-  };
-  uint8_t code1 = *(uint8_t *)args[0];
-  uint8_t code2 = *(uint8_t *)args[1];
-  if (code1 == 0x0F && code2 == 0xF0) {
+  uint8_t code = *(uint8_t *)arg;
+  if (code == 0xF0) {
     test_result = 0;
   }
   return ERR_NONE;
 }
 
-enum squirrel_error test_release(struct key *key, uint8_t layer,
-                                 uint8_t key_index, int arg_count,
-                                 void **args) {
+enum squirrel_error test_release(uint8_t layer, uint8_t key_index, void *arg) {
   (void)layer;
   (void)key_index;
-
-  if (arg_count != 2) {
-    return ERR_KEY_FUNC_WRONG_ARGUMENT_COUNT;
-  };
-  uint8_t code1 = *(uint8_t *)args[0];
-  uint8_t code2 = *(uint8_t *)args[1];
-  if (code1 == 0xF0 && code2 == 0x0F) {
+  uint8_t code = *(uint8_t *)arg;
+  if (code == 0xF0) {
     test_result = 0;
   }
   return ERR_NONE;
 }
 
 // test: press_key, release_key + check_key - in squirrel_key.c
+#define SQUIRREL_KEYCOUNT 1
+
 int main() {
-  squirrel_init(1);
+  squirrel_init();
 
   // press_key + release_key
-  uint8_t code1 = 0x0F;
-  uint8_t code2 = 0xF0;
+  uint8_t code = 0xF0;
 
   struct key testkey;
   testkey.pressed = test_press;
-  testkey.pressed_argument_count = 2;
-  testkey.pressed_arguments = malloc(2 * sizeof(void *));
-  testkey.pressed_arguments[0] = &code1;
-  testkey.pressed_arguments[1] = &code2;
-
+  testkey.pressed_argument = &code;
   testkey.released = test_release;
-  testkey.released_argument_count = 2;
-  testkey.released_arguments = malloc(2 * sizeof(void *));
-  testkey.released_arguments[0] = &code2;
-  testkey.released_arguments[1] = &code1;
-
-  layers[0].keys[0] = testkey;
+  testkey.released_argument = &code;
+  copy_key(&testkey, &layers[0].keys[0]);
   layers[0].active = true;
 
   // check that arguments are correct, and in the correct order.
@@ -73,10 +53,10 @@ int main() {
     return 3;
   }
   // keys are copied to layer 17 (index 16) when pressed, to avoid layer issues.
-  if (layers[16].keys[0].pressed_arguments[0] != &code1) {
+  if (layers[16].keys[0].pressed_argument != &code) {
     return 4;
   }
-  if (layers[16].keys[0].pressed_arguments[1] != &code2) {
+  if (layers[16].keys[0].pressed_argument != &code) {
     return 5;
   }
 
@@ -89,10 +69,10 @@ int main() {
     return 7;
   }
   // Keys are replaced with passthrough on layer 17 when released.
-  if (layers[16].keys[0].pressed_arguments != NULL) {
+  if (layers[16].keys[0].pressed_argument != NULL) {
     return 8;
   }
-  if (layers[16].keys[0].released_arguments != NULL) {
+  if (layers[16].keys[0].released_argument != NULL) {
     return 9;
   }
 
@@ -148,9 +128,6 @@ int main() {
   if (key_states[0] != false) {
     return 21;
   }
-
-  free(testkey.pressed_arguments);
-  free(testkey.released_arguments);
 
   return 0;
 }

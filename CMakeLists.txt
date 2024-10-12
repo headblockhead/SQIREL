@@ -2,12 +2,15 @@ cmake_minimum_required(VERSION 3.12)
 
 project(squirrel VERSION 0.0.1 DESCRIPTION "Simplified, runtime-configurable QMK as a library")
 
+add_compile_definitions(SQUIRREL_KEYCOUNT=1)
+
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
         message(STATUS "Debug/Development build enabled")
         set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Autocomplete support
         add_compile_options(-Og) # Enable debug optimizations
 elseif(CMAKE_BUILD_TYPE STREQUAL "Testing")
         message(STATUS "Testing enabled")
+        add_compile_options(-O3) # Don't include test code in coverage percent.
         include(CTest)
         enable_testing()
 
@@ -60,6 +63,11 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Testing")
         add_executable(keyboard_activate_deactivate_get_modifier tests/keyboard_activate_deactivate_get_modifier.c)
         target_link_libraries(keyboard_activate_deactivate_get_modifier squirrel)
         add_test(NAME keyboard_activate_deactivate_get_modifier COMMAND keyboard_activate_deactivate_get_modifier)
+        
+        add_executable(keymap tests/keymap.c)
+        target_link_libraries(keymap squirrel)
+        target_compile_definitions(keymap PRIVATE SQUIRREL_KEYCOUNT=2)
+        add_test(NAME keymap COMMAND keymap)
 else()
        add_compile_options(-Os) # Enable size optimizations
 endif()

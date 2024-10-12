@@ -7,50 +7,42 @@
 uint8_t test_result = 1; // 0 = pass, 1 = fail
 bool bad_test = false;   // true = fail
 
-enum squirrel_error test_press(struct key *key, uint8_t layer,
-                               uint8_t key_index, int arg_count, void **args) {
+enum squirrel_error test_press(uint8_t layer, uint8_t key_index, void *arg) {
   test_result = 0;
   return ERR_NONE;
 }
 
-enum squirrel_error test_release(struct key *key, uint8_t layer,
-                                 uint8_t key_index, int arg_count,
-                                 void **args) {
+enum squirrel_error test_release(uint8_t layer, uint8_t key_index, void *arg) {
   test_result = 0;
   return ERR_NONE;
 }
 
-enum squirrel_error bad_test_press(struct key *key, uint8_t layer,
-                                   uint8_t key_index, int arg_count,
-                                   void **args) {
+enum squirrel_error bad_test_press(uint8_t layer, uint8_t key_index,
+                                   void *arg) {
   bad_test = true;
   return ERR_NONE;
 }
 
-enum squirrel_error bad_test_release(struct key *key, uint8_t layer,
-                                     uint8_t key_index, int arg_count,
-                                     void **args) {
+enum squirrel_error bad_test_release(uint8_t layer, uint8_t key_index,
+                                     void *arg) {
   bad_test = true;
   return ERR_NONE;
 }
 
 // test: quantum_passthrough_press + quantum_passthrough_release test - in
 // squirrel_quantum.c
+#define SQUIRREL_KEYCOUNT 1
 int main() {
-  squirrel_init(1);
+  squirrel_init();
 
   struct key testkey;
   testkey.pressed = test_press;
-  testkey.pressed_argument_count = 0;
   testkey.released = test_release;
-  testkey.released_argument_count = 0;
   layers[0].keys[0] = testkey; // When testkey is pressed, the test is passing.
 
   struct key passthroughkey;
   passthroughkey.pressed = quantum_passthrough_press;
-  passthroughkey.pressed_argument_count = 0;
   passthroughkey.released = quantum_passthrough_release;
-  passthroughkey.released_argument_count = 0;
   layers[1].keys[0] = passthroughkey; // This is the key being tested.
 
   layers[0].active = true;
@@ -84,9 +76,7 @@ int main() {
 
   struct key badtestkey;
   badtestkey.pressed = bad_test_press;
-  badtestkey.pressed_argument_count = 0;
   badtestkey.released = bad_test_release;
-  badtestkey.released_argument_count = 0;
   layers[1].keys[0] = badtestkey; // When badtestkey is pressed, the test is
                                   // failing.
 
