@@ -3,13 +3,12 @@ on:
   workflow_dispatch:
     inputs:
       bump:
-        description: 'bump amount'
-        required: false
-        default: 'patch'
+        type: choice
+        description: Amount to bump
         options:
-          patch:
-          minor:
-          major:
+          - patch
+          - minor
+          - major
 
 permissions:
   contents: write
