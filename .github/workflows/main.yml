@@ -1,0 +1,70 @@
+name: Build, Test, and Release
+on: 
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+      with:
+        submodules: recursive
+    - uses: DeterminateSystems/nix-installer-action@b92f66560d6f97d6576405a7bae901ab57e72b6a
+    - uses: DeterminateSystems/magic-nix-cache-action@a76a83091cd8728db8c37312dbdd0eeb1177a6c0
+    - run: nix build '.?submodules=1#squirrel'
+    - uses: actions/upload-artifact@184d73b71b93c222403b2e7f1ffebe4508014249
+      with:
+        name: libsquirrel.a
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+      with:
+        submodules: recursive
+    - uses: DeterminateSystems/nix-installer-action@b92f66560d6f97d6576405a7bae901ab57e72b6a
+    - uses: DeterminateSystems/magic-nix-cache-action@a76a83091cd8728db8c37312dbdd0eeb1177a6c0
+    - run: nix flake check
+  release:
+    runs-on: ubuntu-latest
+    needs: [build, test]
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+      - uses: actions/download-artifact@d0ce8fd1167ed839810201de977912a090ab10a7
+        with:
+          name: libsquirrel.a
+      - name: Create Branch
+        run: |
+          git checkout -b ${{ env.PR_BRANCH }}
+      - name: Create Changelog
+        uses: TriPSs/conventional-changelog-action@492ffbe47a9dc2606e0fd58005d2579aff331dd7
+        id: changelog
+        with:
+          github-token: ${{ github.token }}
+          git-user-name: "github-actions[bot]"
+          git-user-email: "github-actions[bot]@users.noreply.github.com"
+          git-branch: ${{ env.PR_BRANCH }}
+          skip-git-pull: true
+          output-file: false
+          version-file: .github/package.yaml
+          create-summary: true
+      - uses: softprops/action-gh-release@0a7d9cdbe44d16ac5fe9788836ca8af96266902e
+        with:
+          token: ${{ secrets.GH_OWNER_TOKEN }}
+          tag_name: ${{ needs.changelog.outputs.tag }}
+          prerelease: false
+          draft: false
+          files: build/libsquirrel.a
+          generate_release_notes: true
+          name: ${{ needs.changelog.outputs.tag }}
+          body: |
+            <details>
+            <summary>Changelog</summary>
+  
+            ${{ clean_changelog }}
+            </details>
