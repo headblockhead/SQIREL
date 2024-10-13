@@ -20,7 +20,11 @@ stdenv.mkDerivation {
     "-DCMAKE_CXX_COMPILER=${gcc}/bin/g++"
   ];
 
-  installPhase = ''cp -r . $out'';
+  installPhase = ''
+    mkdir -p $out
+    mkdir -p $out/lib
+    cp libsquirrel.a $out/lib/libsquirrel.a
+  '';
 
   checkPhase = ''make -C ./build test'';
 
