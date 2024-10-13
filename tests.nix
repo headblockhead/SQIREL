@@ -7,9 +7,7 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "squirrel-tests";
-  version = "0.0.0";
-
+  name = "squirrel-tests";
   src = ./.;
 
   nativeBuildInputs = [ cmake gnumake gcovr ];
@@ -22,13 +20,13 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
-    ctest -T Test -T Coverage --timeout 60 # tests should never take longer than 60 seconds each to complete.
-    cp -r . $out'';
+    mkdir -p $out # Output directory must be created for the build to succeed
+    ctest -T Test -T Coverage --timeout 60
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/headblockhead/squirrel";
     description = "Keyboard firmware library inspired by QMK.";
-    licencse = licenses.mit;
     platforms = with platforms; linux;
   };
 }

@@ -6,9 +6,7 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "squirrel";
-  version = "0.0.0";
-
+  name = "squirrel";
   src = ./.;
 
   nativeBuildInputs = [ cmake gnumake ];
@@ -31,7 +29,6 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://github.com/headblockhead/squirrel";
     description = "Keyboard firmware library inspired by QMK.";
-    licencse = licenses.mit;
     platforms = with platforms; linux;
   };
 }

@@ -3,23 +3,13 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     flake-utils.url = "github:numtide/flake-utils";
-    xc.url = "github:joerdav/xc";
   };
-  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+  outputs = { nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem
       (system:
         let
           pkgs = import nixpkgs {
             inherit system;
-            overlays = [
-              (final: prev: {
-                xc = inputs.xc.packages.x86_64-linux.xc;
-                picotool = pkgs.callPackage ./picotool.nix {
-                  pico-sdk = pkgs.callPackage ./pico-sdk.nix { };
-                };
-                pico-sdk = pkgs.callPackage ./pico-sdk.nix { };
-              })
-            ];
           };
         in
         {
@@ -36,8 +26,9 @@
               cacert
             ];
           };
-          # The firmware (nix build)
+          # The library (nix build)
           packages.squirrel = pkgs.callPackage ./default.nix { };
+          # The tests (nix flake check)
           checks.squirrel-tests = pkgs.callPackage ./tests.nix { };
         }
       );
