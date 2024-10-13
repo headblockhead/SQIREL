@@ -14,5 +14,5 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: libsquirrel.a
-        path: result/libsquirrel.a
+        path: result/lib/libsquirrel.a
 
