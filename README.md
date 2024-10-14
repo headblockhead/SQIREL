@@ -1,6 +1,8 @@
 # SQUIRREL - Simplified, runtime-configurable QMK as a library
 <sup>or: Simplified QMK Uniquely Immaculate (and) Readable Runtime Editable Library</sup>
 
+<img src="./mascot.svg" width="255">
+
 🚧 This project is currently **under construction**, so do not expect a usable result yet! 🚧
 
 ## Goals:
