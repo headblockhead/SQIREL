@@ -16,12 +16,17 @@ void get_packet(uint8_t (*packet)[9]) {
   (*packet)[8] = consumer >> 8;   // 8th byte
 }
 
-uint8_t remote_keycodes[6] = {0};
+bool remote_keycodes[256] = {false};
 uint8_t remote_modifiers = 0;
 uint16_t remote_consumer_code = 0;
 
 void process_packet(uint8_t (*packet)[9]) {
-  memcpy(remote_keycodes, *packet, 6);                       // 0th to 5th byte
+  for (int i = 0; i < 6; i++) {
+    if ((*packet)[i] == 0) {
+      break;
+    }
+    remote_keycodes[(*packet)[i]] = true;
+  }
   remote_modifiers = (*packet)[6];                           // 6th byte
   remote_consumer_code = (*packet)[7] | ((*packet)[8] << 8); // 7th and 8th byte
 }

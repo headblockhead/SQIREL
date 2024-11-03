@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdbool.h>
 #include <stdint.h>
 
 // get_packet takes a pointer to a 9-byte array and fills it with the data for
@@ -10,6 +11,6 @@ void get_packet(uint8_t (*packet)[9]);
 // it into the remote_keycodes, remote_modifiers, and remote_consumer_code.
 void process_packet(uint8_t (*packet)[9]);
 
-extern uint8_t remote_keycodes[6];
+extern bool remote_keycodes[256];
 extern uint8_t remote_modifiers;
 extern uint16_t remote_consumer_code;
