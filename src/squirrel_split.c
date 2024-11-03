@@ -21,6 +21,9 @@ uint8_t remote_modifiers = 0;
 uint16_t remote_consumer_code = 0;
 
 void process_packet(uint8_t (*packet)[9]) {
+  for (int i = 0; i < 256; i++) {
+    remote_keycodes[i] = false;
+  }
   for (int i = 0; i < 6; i++) {
     if ((*packet)[i] == 0) {
       break;
