@@ -51,6 +51,7 @@
               runHook postCheck
             '';
           };
+          packages.default = packages.squirrel;
           checks.squirrel = packages.squirrel.overrideAttrs (oldAttrs: {
             doCheck = true;
           });
