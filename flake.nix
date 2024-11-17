@@ -19,6 +19,8 @@
               gcovr
             ];
           };
+          # Reminder! If you want to use SQUIRREL as a library in one of your projects, you MUST build it yourself by adding the directory to your project with CMAKE and changing SQUIRREL_KEYCOUNT, for example:
+          # add_compile_definitions(SQUIRREL_KEYCOUNT=100)
           packages.squirrel = pkgs.stdenv.mkDerivation {
             name = "squirrel";
             src = ./.;
