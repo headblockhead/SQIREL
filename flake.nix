@@ -12,7 +12,13 @@
           };
         in
         rec {
-          # The library (nix build)
+          devShells.default = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              xc
+              cmake
+              gcovr
+            ];
+          };
           packages.squirrel = pkgs.stdenv.mkDerivation {
             name = "squirrel";
             src = ./.;
@@ -41,7 +47,6 @@
               runHook postCheck
             '';
           };
-
           checks.squirrel = packages.squirrel.overrideAttrs (oldAttrs: {
             doCheck = true;
           });
