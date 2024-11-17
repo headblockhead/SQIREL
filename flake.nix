@@ -1,5 +1,4 @@
 {
-  description = "Tools for developing, building and testing SQUIRREL";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     flake-utils.url = "github:numtide/flake-utils";
@@ -12,24 +11,40 @@
             inherit system;
           };
         in
-        {
-          # Development shell (nix develop)
-          devShells.default = pkgs.mkShell {
-            buildInputs = with pkgs; [
-              xc
-              gcovr
-              cmake
-              gcc
-              ccls
-              gnumake
-              git
-              cacert
-            ];
-          };
+        rec {
           # The library (nix build)
-          packages.squirrel = pkgs.callPackage ./default.nix { };
-          # The tests (nix flake check)
-          checks.squirrel-tests = pkgs.callPackage ./tests.nix { };
+          packages.squirrel = pkgs.stdenv.mkDerivation {
+            name = "squirrel";
+            src = ./.;
+
+            nativeBuildInputs = with pkgs; [ cmake gcovr ];
+
+            buildPhase = ''
+              runHook preBuild
+              cmake .
+              cmake --build . -t squirrel
+              runHook postBuild
+            '';
+
+            installPhase = ''
+              runHook preInstall
+              mkdir -p $out/lib
+              cp libsquirrel.a $out/lib/libsquirrel.a
+              runHook postInstall
+            '';
+
+            checkPhase = ''
+              runHook preCheck
+              cmake .
+              cmake --build .
+              ctest --timeout 60
+              runHook postCheck
+            '';
+          };
+
+          checks.squirrel = packages.squirrel.overrideAttrs (oldAttrs: {
+            doCheck = true;
+          });
         }
       );
 }
