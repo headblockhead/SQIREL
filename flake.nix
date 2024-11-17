@@ -35,7 +35,9 @@
             installPhase = ''
               runHook preInstall
               mkdir -p $out/lib
+              mkdir -p $out/include/squirrel
               cp libsquirrel.a $out/lib/libsquirrel.a
+              cp $src/include/* $out/include/squirrel
               runHook postInstall
             '';
 
