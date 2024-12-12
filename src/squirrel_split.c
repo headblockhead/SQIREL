@@ -9,7 +9,7 @@ void get_packet(uint8_t (*packet)[9]) {
   memset(*packet, 0, 9);
   uint8_t local_keycodes[6] = {0};
   keyboard_get_local_keycodes(&local_keycodes);
-  memcpy(packet, local_keycodes, 6);             // 0th to 5th byte
+  memcpy(*packet, local_keycodes, 6);            // 0th to 5th byte
   (*packet)[6] = keyboard_get_local_modifiers(); // 6th byte
   uint16_t consumer = consumer_get_local_consumer_code();
   (*packet)[7] = consumer & 0xFF; // 7th byte
