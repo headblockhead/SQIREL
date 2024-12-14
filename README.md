@@ -25,7 +25,7 @@ Builds a static archive library (`.a`).
 
 ```bash
 cmake -DCMAKE_BUILD_TYPE=Release ..
-make -j4
+make -j$(nproc)
 ```
 
 ### Build-debug
@@ -35,7 +35,7 @@ Builds the library with debug build type.
 
 ```bash
 cmake -DCMAKE_BUILD_TYPE=Debug .. 
-make -j4
+make -j$(nproc)
 cp compile_commands.json ../ # Copies the autocomplete information for ccls.
 ```
 
@@ -46,7 +46,7 @@ Tests the library
 
 ```bash
 cmake -DCMAKE_BUILD_TYPE=Testing ..
-make -j4
+make -j$(nproc)
 ctest -T Test -T Coverage --output-on-failure .
 ```
 
