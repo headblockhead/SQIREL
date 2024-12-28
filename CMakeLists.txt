@@ -2,11 +2,6 @@ cmake_minimum_required(VERSION 3.12)
 
 project(squirrel)
 
-# target_compile_definitions(squirrel PUBLIC SQUIRREL_KEYCOUNT=your_keycount)
-# Override this using the above line in your build of the library! Otherwise, it
-# will default to 1 key.
-add_compile_definitions(SQUIRREL_KEYCOUNT=1)
-
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
   add_compile_options(-Og)

@@ -52,7 +52,7 @@ enum squirrel_error release_key(uint8_t key_index) {
   return ERR_NONE;
 }
 
-bool key_states[SQUIRREL_KEYCOUNT];
+bool *key_states;
 
 enum squirrel_error check_key(uint8_t key_index, bool is_pressed) {
   if (key_states[key_index] == is_pressed) {

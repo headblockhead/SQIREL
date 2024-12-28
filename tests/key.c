@@ -28,10 +28,8 @@ enum squirrel_error test_release(uint8_t layer, uint8_t key_index, void *arg) {
 }
 
 // test: press_key, release_key + check_key - in squirrel_key.c
-#define SQUIRREL_KEYCOUNT 1
-
 int main() {
-  squirrel_init();
+  squirrel_init(1);
 
   // press_key + release_key
   uint8_t code = 0xF0;

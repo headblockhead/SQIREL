@@ -13,9 +13,8 @@
 // layer_solo_press
 // layer_solo_release
 // in squirrel_quantum.c
-#define SQUIRREL_KEYCOUNT 1
 int main() {
-  squirrel_init();
+  squirrel_init(1);
   enum squirrel_error err;
   struct key test_key;
 

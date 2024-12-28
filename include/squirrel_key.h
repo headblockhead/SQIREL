@@ -23,7 +23,7 @@ release_key(uint8_t key_index); // Release the key at the index in the
 
 // key_states is an array of booleans that represent the state of each key. Used
 // by check_key to determine if a key is pressed or released.
-extern bool key_states[SQUIRREL_KEYCOUNT];
+extern bool *key_states;
 
 // check_key compares the state of the key at the index to the key_states array
 // to determine if the key is pressed or released, and calls the appropriate

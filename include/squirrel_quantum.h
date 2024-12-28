@@ -9,7 +9,7 @@
 
 struct layer {
   bool active; // true if this layer is currently active
-  struct key keys[SQUIRREL_KEYCOUNT];
+  struct key *keys;
 };
 
 // layers is a list of all the layers in the keyboard. 0-15 are configured,

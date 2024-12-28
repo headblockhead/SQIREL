@@ -31,9 +31,8 @@ enum squirrel_error bad_test_release(uint8_t layer, uint8_t key_index,
 
 // test: quantum_passthrough_press + quantum_passthrough_release test - in
 // squirrel_quantum.c
-#define SQUIRREL_KEYCOUNT 1
 int main() {
-  squirrel_init();
+  squirrel_init(1);
 
   struct key testkey;
   testkey.pressed = test_press;
