@@ -1,7 +1,6 @@
 // SQUIRREL_CONSUMER_H provides an interface for interacting as a USB HID
 // Consumer Control device.
-#ifndef SQUIRREL_CONSUMER_H
-#define SQUIRREL_CONSUMER_H
+#pragma once
 
 #include <stdint.h>
 
@@ -17,8 +16,3 @@ void consumer_activate_consumer_code(uint16_t consumer_code);
 void consumer_deactivate_consumer_code(uint16_t consumer_code);
 // consumer_get_consumer_code returns the currently active consumer code.
 uint16_t consumer_get_consumer_code();
-// consumer_get_local_consumer_code returns the currently active consumer code
-// without considering any remote boards. This is only useful in split
-// keyboards.
-uint16_t consumer_get_local_consumer_code();
-#endif

@@ -3,6 +3,7 @@
 #include "squirrel_consumer.h"
 #include "squirrel_key.h"
 #include "squirrel_keyboard.h"
+#include "squirrel_split.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -69,7 +70,7 @@ enum squirrel_error quantum_passthrough_press(uint8_t layer, uint8_t key_index,
     return ERR_PASSTHROUGH_ON_BOTTOM_LAYER;
   };
   for (int i = layer - 1; i >= 0; i--) {
-    if (!layers[i].active) {
+    if (!layers[i].active && !remote_layers[i]) {
       continue;
     }
     struct key selected_key = layers[i].keys[key_index];
@@ -94,7 +95,7 @@ enum squirrel_error quantum_passthrough_release(uint8_t layer,
     return ERR_PASSTHROUGH_ON_BOTTOM_LAYER;
   };
   for (int i = layer - 1; i >= 0; i--) {
-    if (!layers[i].active) {
+    if (!layers[i].active && !remote_layers[i]) {
       continue;
     }
     struct key selected_key = layers[i].keys[key_index];
@@ -138,20 +139,5 @@ enum squirrel_error layer_toggle_press(uint8_t layer, uint8_t key_index,
 
 enum squirrel_error layer_toggle_release(uint8_t layer, uint8_t key_index,
                                          void *arg) {
-  return ERR_NONE;
-}
-
-enum squirrel_error layer_solo_press(uint8_t layer, uint8_t key_index,
-                                     void *arg) {
-  uint8_t target_layer = *(uint8_t *)arg;
-  for (uint8_t i = 0; i < 16; i++) {
-    layers[i].active = false;
-  }
-  layers[target_layer].active = true;
-  return ERR_NONE;
-}
-
-enum squirrel_error layer_solo_release(uint8_t layer, uint8_t key_index,
-                                       void *arg) {
   return ERR_NONE;
 }

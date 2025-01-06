@@ -1,5 +1,4 @@
-#ifndef SQUIRREL_KEY_H
-#define SQUIRREL_KEY_H
+#pragma once
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -32,4 +31,3 @@ enum squirrel_error check_key(uint8_t key_index,
                               bool is_pressed); // Check if the key at the
                                                 // index is pressed or
                                                 // released.
-#endif

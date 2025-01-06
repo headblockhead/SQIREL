@@ -70,14 +70,3 @@ struct key layer_toggle(uint8_t layer) {
       .released_argument = new_layer,
   };
 }
-
-struct key layer_solo(uint8_t layer) {
-  uint8_t *new_layer = malloc(sizeof(uint8_t));
-  *new_layer = layer;
-  return (struct key){
-      .pressed = layer_solo_press,
-      .released = layer_solo_release,
-      .pressed_argument = new_layer,
-      .released_argument = new_layer,
-  };
-}

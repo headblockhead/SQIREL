@@ -1,5 +1,4 @@
-#ifndef SQUIRREL_H
-#define SQUIRREL_H
+#pragma once
 
 #include <stdint.h>
 
@@ -8,5 +7,3 @@ enum squirrel_error {
   ERR_OOM,
   ERR_PASSTHROUGH_ON_BOTTOM_LAYER,
 };
-
-#endif

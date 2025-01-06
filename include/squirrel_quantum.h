@@ -1,5 +1,4 @@
-#ifndef SQUIRREL_QUANTUM_H
-#define SQUIRREL_QUANTUM_H
+#pragma once
 
 #include "squirrel.h"
 #include "squirrel_key.h"
@@ -76,16 +75,3 @@ enum squirrel_error layer_toggle_press(uint8_t layer, uint8_t key_index,
 // Equivalent to TG() in QMK.
 enum squirrel_error layer_toggle_release(uint8_t layer, uint8_t key_index,
                                          void *arg);
-
-// layer_solo_press turns off all other layers than the layer with the given
-// index. It expects the layer number as the first uint8 argument. Equivalent to
-// TO() in QMK.
-enum squirrel_error layer_solo_press(uint8_t layer, uint8_t key_index,
-                                     void *arg);
-
-// layer_solo_release does nothing at the moment. It expects the layer number
-// as a uint8 anyway - this is a placeholder for future functionality.
-// Equivalent to TO() in QMK.
-enum squirrel_error layer_solo_release(uint8_t layer, uint8_t key_index,
-                                       void *arg);
-#endif

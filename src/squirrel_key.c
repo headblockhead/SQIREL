@@ -1,6 +1,7 @@
 #include "squirrel_key.h"
 #include "squirrel.h"
 #include "squirrel_quantum.h"
+#include "squirrel_split.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,7 +12,7 @@ void copy_key(struct key *source, struct key *destination) {
 
 enum squirrel_error press_key(uint8_t key_index) {
   for (int i = 16; i >= 0; i--) {
-    if (!layers[i].active) {
+    if (!layers[i].active && !remote_layers[i]) {
       continue;
     }
     struct key selected_key = layers[i].keys[key_index];
@@ -31,7 +32,7 @@ enum squirrel_error press_key(uint8_t key_index) {
 
 enum squirrel_error release_key(uint8_t key_index) {
   for (int i = 16; i >= 0; i--) {
-    if (!layers[i].active) {
+    if (!layers[i].active && !remote_layers[i]) {
       continue;
     }
     struct key selected_key = layers[i].keys[key_index];

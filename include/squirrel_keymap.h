@@ -1,5 +1,4 @@
-#ifndef SQUIRREL_KEYMAP_H
-#define SQUIRREL_KEYMAP_H
+#pragma once
 #include "squirrel_key.h"
 
 struct key nop(void);
@@ -9,5 +8,3 @@ struct key consumer(uint16_t consumer);
 struct key passthrough(void);
 struct key layer_momentary(uint8_t layer);
 struct key layer_toggle(uint8_t layer);
-struct key layer_solo(uint8_t layer);
-#endif
