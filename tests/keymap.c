@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 int main() {
-  squirrel_init();
+  squirrel_init(2);
 
   layers[0].keys[0] = keyboard(0x00);
   layers[0].keys[1] = keyboard(0x01);

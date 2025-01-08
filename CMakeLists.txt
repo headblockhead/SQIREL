@@ -24,6 +24,4 @@ add_library(
 target_include_directories(squirrel PUBLIC include)
 set_target_properties(squirrel PROPERTIES PUBLIC_HEADER include/squirrel.h)
 
-if(BUILD_TESTING)
-  add_subdirectory(tests)
-endif()
+add_subdirectory(tests)
