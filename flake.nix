@@ -45,7 +45,9 @@
               runHook preCheck
               cmake .
               cmake --build .
+              cd tests
               ctest --timeout 60
+              cd ..
               runHook postCheck
             '';
           };
