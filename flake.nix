@@ -43,7 +43,7 @@
 
             checkPhase = ''
               runHook preCheck
-              cmake .
+              cmake -DCMAKE_BUILD_TYPE=Testing .
               cmake --build .
               cd tests
               ctest --timeout 60

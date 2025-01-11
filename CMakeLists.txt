@@ -24,4 +24,6 @@ add_library(
 target_include_directories(squirrel PUBLIC include)
 set_target_properties(squirrel PROPERTIES PUBLIC_HEADER include/squirrel.h)
 
-add_subdirectory(tests)
+if(CMAKE_BUILD_TYPE STREQUAL "Testing")
+  add_subdirectory(tests)
+endif()
