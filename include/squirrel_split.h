@@ -6,6 +6,7 @@
 // get_packet takes a pointer to a 11-byte array and fills it with the data for
 // the packet to be sent.
 void get_packet(uint8_t (*packet)[11]);
+void get_local_packet(uint8_t (*packet)[11]);
 
 // process_packet takes a pointer to a 11-byte array and extracts the data from
 // it into the remote_* variables.
