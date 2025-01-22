@@ -16,3 +16,4 @@ uint16_t consumer_get_consumer_code() {
   }
   return remote_consumer_code;
 }
+uint16_t consumer_get_local_consumer_code() { return consumer_code; }

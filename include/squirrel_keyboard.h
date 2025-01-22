@@ -15,6 +15,7 @@ void keyboard_deactivate_keycode(uint8_t keycode);
 // keycodes. 6 is the maximum number of keycodes that can be sent over USB HID.
 // If there are no keycodes, the function will return false.
 bool keyboard_get_keycodes(uint8_t (*active_keycodes)[6]);
+bool keyboard_get_local_keycodes(uint8_t (*active_keycodes)[6]);
 
 // keyboard_activate_modifier marks the provided modifier as active.
 void keyboard_activate_modifier(uint8_t modifier);
@@ -22,3 +23,4 @@ void keyboard_activate_modifier(uint8_t modifier);
 void keyboard_deactivate_modifier(uint8_t modifier);
 // keyboard_get_modifiers returns a bitfield of active modifiers.
 uint8_t keyboard_get_modifiers();
+uint8_t keyboard_get_local_modifiers();
